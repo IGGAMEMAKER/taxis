@@ -12,3 +12,4 @@ router.post('/authenticate', (req, res) => {
   res.status(200).send('authenticated');
 });
 
+module.exports = router;
