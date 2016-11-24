@@ -1,13 +1,11 @@
 var api;
+var users = require('../models/users');
+var orders = require('../models/orders');
+var drivers = require('../models/drivers');
 
 api = {
-  users: {
-    get: function () {
-      return {
-        login: 'alex Sabry'
-      };
-    }
-  }
+  users,
+  orders,
 };
 
 
