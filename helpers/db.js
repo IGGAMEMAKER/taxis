@@ -101,31 +101,31 @@ function remove(modelName, find, parameters, options){
 var wrap = function(modelName){
   return {
     list: function(find, parameters) {
-      return list(modelName, find, parameters)
+      return list(modelName, find, parameters);
     },
     find: function (find, parameters){
-      return searchOne(modelName, find, parameters)
+      return searchOne(modelName, find, parameters);
     },
     findOne: function (find, parameters){
-      return findOne(modelName, find, parameters)
+      return findOne(modelName, find, parameters);
     },
     save: function(item){
-      return save(modelName, item)
+      return save(modelName, item);
     },
     update: function(find, updateObj, options){
-      return update(modelName, find, updateObj, options)
+      return update(modelName, find, updateObj, options);
     },
     remove: function(find, parameters, options){
-      return remove(modelName, find, parameters, options)
+      return remove(modelName, find, parameters, options);
     },
     aggregate: function(array){
-      return aggregate(modelName, array)
+      return aggregate(modelName, array);
     },
 
     model: function(modelName){
-      return models[modelName]
+      return models[modelName];
     }
-  }
+  };
 };
 
 module.exports = {

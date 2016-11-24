@@ -11,19 +11,21 @@ module.exports = function(dbAddress) {
       registered: Date,
 
       pincode: String,
+      authKey: String, // hashed variant of code, which we send to client
       activated: Date,
 
-      car: Object,
+      car: Object
     }),
 
     Orders: db.model('Orders', {
-      driverId: String,
       userId: String,
       location: Object,
       destination: Object,
+      driverId: String,
+      status: Number,
 
       added: Date,
-      options: Object, // smoking and all such stuff
+      options: Object // smoking and all such stuff
     }),
 
     Drivers: db.model('Drivers', {
