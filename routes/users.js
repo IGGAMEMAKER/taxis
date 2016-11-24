@@ -16,6 +16,14 @@ router.get('/', authentication, (req, res) => {
   res.send('respond with a resource');
 });
 
+router.post('/', (req, res) => {
+  var phone = req.body.phone;
+  var name = req.body.name;
+
+  // go to database
+
+  logger.log(phone, name);
+});
 
 
 // router.get('/users', )
