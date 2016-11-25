@@ -30,12 +30,6 @@ module.exports = function(dbAddress) {
 
     Drivers: db.model('Drivers', {
       name: String,
-      draw: Object,
-      level: Number,
-      settings: Object,
-      Packs: Array,
-      Cards: Array,
-      Collections: Array
     })
   };
 };

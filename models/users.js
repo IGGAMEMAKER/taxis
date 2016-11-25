@@ -10,8 +10,18 @@ var add = (phone, name) => {
     });
 };
 
+var update = (phone, changes) => {
+  return Users.update({ phone }, changes);
+};
+
+var all = () => {
+  return Users.list({});
+};
+
 var exportObject = {
-  add
+  add,
+  all,
+  update
 };
 
 module.exports = exportObject;
