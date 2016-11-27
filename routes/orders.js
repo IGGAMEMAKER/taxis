@@ -27,9 +27,12 @@ router.get('/all', authentication.isAdmin, (req, res) => {
 });
 
 router.post('/', authentication.isAuthenticated, (req, res) => {
-  var userId = req.body.phone;
+  var userId = req.body.userId;
   var orders = req.body.orders;
 
+  orders.forEach((o, i) => {
+    orders.userId = userId;
+  });
   // go to database
 
   logger.log(orders);

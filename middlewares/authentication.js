@@ -13,6 +13,7 @@ module.exports = {
 
     logger.log('REWRITE AUTHENTICATION! /middlewares/authentication/isAuthenticated');
     if (authKey === mockKey) { // check authentication
+      req.userId = phone;
       next();
     } else {
       res.status(501);
@@ -34,5 +35,5 @@ module.exports = {
     } else {
       res.status(501);
     }
-  },
+  }
 };
