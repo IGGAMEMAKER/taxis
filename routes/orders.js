@@ -20,12 +20,6 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
     .catch(error('', res));
 });
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.orders.all()
-    .then(respond(res))
-    .catch(error('', res));
-});
-
 router.post('/', authentication.isAuthenticated, (req, res) => {
   var userId = req.body.userId;
   var orders = req.body.orders;
