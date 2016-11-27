@@ -18,7 +18,7 @@ module.exports = {
     } else {
       // logger.log('authentication failed');
       // res.status(501).json({ ololo: 1}).end();
-      res.send(401);
+      res.sendStatus(401);
       // next(501);
     }
   },
@@ -27,7 +27,7 @@ module.exports = {
     if (true) { // check authentication
       next();
     } else {
-      res.send(403);
+      res.sendStatus(403);
     }
   },
 
@@ -37,7 +37,7 @@ module.exports = {
       req.isDriver = true;
       next();
     } else {
-      res.status(403);
+      res.sendStatus(403);
     }
   }
 };
