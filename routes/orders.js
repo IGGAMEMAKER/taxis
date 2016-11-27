@@ -33,7 +33,6 @@ router.post('/', authentication.isAuthenticated, (req, res) => {
   orders.forEach((o, i) => {
     orders.userId = userId;
   });
-  // go to database
 
   logger.log(orders);
   api.orders.addList(orders)

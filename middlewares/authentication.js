@@ -16,7 +16,10 @@ module.exports = {
       req.userId = phone;
       next();
     } else {
-      res.status(501);
+      // logger.log('authentication failed');
+      // res.status(501).json({ ololo: 1}).end();
+      res.send(401);
+      // next(501);
     }
   },
 
@@ -24,16 +27,17 @@ module.exports = {
     if (true) { // check authentication
       next();
     } else {
-      res.status(501);
+      res.send(403);
     }
   },
 
   isDriver: (req, res, next) => {
     // go to DB and find it out
     if (true) { // check authentication
+      req.isDriver = true;
       next();
     } else {
-      res.status(501);
+      res.status(403);
     }
   }
 };
