@@ -19,13 +19,17 @@ module.exports = function(dbAddress) {
 
     Orders: db.model('Orders', {
       userId: String,
-      location: Object,
-      destination: Object,
       driverId: String,
       status: Number,
-      asSoonAsPossible: Boolean,
-
       added: Date, // when we received this order
+
+      location: Object,
+      destination: Object,
+      asSoonAsPossible: Boolean,
+      orderDate: Date, // if asSoonAsPossible is false/0 you need to specify this parameter
+      clientPhone: String,
+      driverDetails: Object,
+
       options: Object // smoking and all such stuff
     }),
 

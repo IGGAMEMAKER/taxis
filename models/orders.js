@@ -17,11 +17,16 @@ var saveRecursively = (list, index, responses) => {
       });
   }
 
-  return { msg: 1, responses };
+  return { msg: 'ok', responses };
+};
+
+var all = () => {
+  return Orders.find({});
 };
 
 var exportObject = {
   add,
+  all,
   addList: saveRecursively
 };
 

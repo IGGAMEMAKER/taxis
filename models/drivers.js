@@ -5,8 +5,13 @@ var add = (object) => {
   return Drivers.save(object);
 };
 
+var all = () => {
+  return Drivers.find({});
+};
+
 var exportObject = {
-  add
+  add,
+  all
 };
 
 module.exports = exportObject;

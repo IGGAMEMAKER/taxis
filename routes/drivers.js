@@ -15,31 +15,26 @@ var respond = res => result => {
 };
 
 router.get('/', authentication.isAuthenticated, (req, res) => {
-  api.orders.all()
+  api.drivers.all()
     .then(respond(res))
     .catch(error('', res));
 });
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.orders.all()
-    .then(respond(res))
-    .catch(error('', res));
-});
-
-router.post('/', authentication.isAuthenticated, (req, res) => {
-  var userId = req.body.phone;
-  var orders = req.body.orders;
+router.post('/', (req, res) => {
+// router.get('/ololo', (req, res) => {
+  var phone = req.body.phone;
+  var name = req.body.name;
 
   // go to database
 
-  logger.log(orders);
-  api.orders.addList(orders)
+  logger.log(phone, name);
+  api.users.add(phone, name)
     .then(respond(res))
     .catch(error('', res));
 });
 
 router.get('/all', authentication.isAdmin, (req, res) => {
-  api.orders.all()
+  api.drivers.all()
     .then(respond(res))
     .catch(error('', res));
 });
