@@ -26,6 +26,7 @@ module.exports = {
   isAdmin: (req, res, next) => {
     if (true) { // check authentication
       logger.log('isAdmin');
+
       next();
     } else {
       res.sendStatus(403);

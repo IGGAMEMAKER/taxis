@@ -49,4 +49,10 @@ router.patch('/', authentication.isAuthenticated, (req, res) => {
     .catch(error('', res));
 });
 
+router.get('/clearAll', authentication.isAdmin, (req, res) => {
+  api.users.clear()
+    .then(respond(res))
+    .catch(error('', res));
+});
+
 module.exports = router;

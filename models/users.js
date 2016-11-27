@@ -10,6 +10,10 @@ var add = (phone, name) => {
     });
 };
 
+var clear = () => {
+  return Users.remove({});
+};
+
 var update = (phone, changes) => {
   return Users.update({ phone }, changes);
 };
@@ -21,7 +25,8 @@ var all = () => {
 var exportObject = {
   add,
   all,
-  update
+  update,
+  clear
 };
 
 module.exports = exportObject;

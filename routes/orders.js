@@ -14,7 +14,8 @@ var respond = res => result => {
   res.json({ msg: result });
 };
 
-router.get('/', authentication.isAuthenticated, (req, res) => {
+// router.get('/', authentication.isAuthenticated, (req, res) => {
+router.get('/', (req, res) => {
   api.orders.all()
     .then(respond(res))
     .catch(error('', res));
@@ -29,6 +30,7 @@ router.post('/', authentication.isAuthenticated, (req, res) => {
   });
 
   logger.log(orders);
+
   api.orders.addList(orders)
     .then(respond(res))
     .catch(error('', res));
