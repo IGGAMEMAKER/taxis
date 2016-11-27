@@ -42,6 +42,8 @@ router.patch('/', authentication.isAuthenticated, (req, res) => {
   var changes = req.body.changes;
   var phone = req.body.phone;
 
+  // check parameters
+
   api.users.update(phone, changes)
     .then(respond(res))
     .catch(error('', res));

@@ -30,6 +30,13 @@ module.exports = function(dbAddress) {
 
     Drivers: db.model('Drivers', {
       name: String,
+      categories: Array,
+      internationalLicence: Boolean,
+      gender: Boolean,
+      isOfficial: Boolean,
+      appearance: String, // comment to Appearance
+
+      isSmoking: Boolean
     })
   };
 };
