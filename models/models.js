@@ -23,14 +23,15 @@ module.exports = function(dbAddress) {
       destination: Object,
       driverId: String,
       status: Number,
+      asSoonAsPossible: Boolean,
 
-      added: Date,
+      added: Date, // when we received this order
       options: Object // smoking and all such stuff
     }),
 
     Drivers: db.model('Drivers', {
       name: String,
-      categories: Array,
+      categories: Object,
       internationalLicence: Boolean,
       gender: Boolean,
       isOfficial: Boolean,
