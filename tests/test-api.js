@@ -11,6 +11,7 @@ var logResponse = tag => (r => {
 var log = tag => (err, res) => {
   if (err) {
     logger.log('ERROR in ' + tag, err);
+    logger.log('ERROR in ' + tag, err.status);
   } else {
     logger.log(tag + ' OK', res.body);
   }
@@ -19,14 +20,21 @@ var log = tag => (err, res) => {
 var get = (url, tag) => {
   request.get(domain + url)
     .end(log(url));
-    // .then(logResponse(url || tag))
-    // .catch(logResponse('ERROR in ' + url));
 };
 
-var post = (url, tag) => {
-  request.get(domain + url)
-    .then(logResponse(url || tag))
-    .catch(logResponse('ERROR in ' + url));
+var post = (url, obj, tag) => {
+  request.post(domain + url)
+    .send(obj)
+    .end(log(url));
 };
 
-get('/users/all');
+var patch = (url, obj, tag) => {
+  request.patch(domain + url)
+    .send(obj)
+    .end(log(url));
+};
+
+// get('/users/all');
+// post('/users', { phone: '8955555555', name: 'Gaga' });
+// get('/authentication/requestCode/8955555555');
+post('/authentication/authenticate', { pincode: 2222, phone: '8955555555' });
