@@ -5,8 +5,9 @@ var logger = console;
 var api = require('../helpers/api');
 var response = require('../helpers/response');
 
-router.get('/authentication/requestCode/:phone', (req, res) => {
+router.get('/requestCode/:phone', (req, res) => {
   var phone = req.params.phone;
+  logger.log(phone);
 
   api.users.getByPhone(phone)
     .then(u => {
@@ -16,14 +17,12 @@ router.get('/authentication/requestCode/:phone', (req, res) => {
       // save code in Users here
 
       res.status(200).json({ message: 'ok' });
-
-      logger.log(phone);
       // sended code 2222 via SMS
     })
     .catch(response.error('', res));
 });
 
-router.post('/authentication/authenticate', (req, res) => {
+router.post('/authenticate', (req, res) => {
   var phone = req.body.phone;
   var pincode = req.body.pincode;
 
