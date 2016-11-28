@@ -5,14 +5,10 @@ var logger = require('../helpers/logger');
 var authentication = require('../middlewares/authentication');
 
 var api = require('../helpers/api');
+var response = require('../helpers/response');
 
-var error = (tag, res) => e => {
-  res.status(500).json({ code: tag, message: e });
-};
-
-var respond = res => result => {
-  res.json({ msg: result });
-};
+var error = response.error;
+var respond = response.respond;
 
 router.get('/', authentication.isAuthenticated, (req, res) => {
   api.drivers.all()

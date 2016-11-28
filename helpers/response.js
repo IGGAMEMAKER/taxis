@@ -3,7 +3,7 @@ module.exports = {
     res.status(500).json({ code: tag, message: e });
   },
 
-  send: res => result => {
+  respond: res => result => {
     res.json({ msg: result });
   }
 };
