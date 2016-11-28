@@ -8,8 +8,12 @@ var logResponse = tag => (r => {
   logger.log(tag, r);
 });
 
-var log = tag => (err, data) => {
-  logger.log(tag, err, data);
+var log = tag => (err, res) => {
+  if (err) {
+    logger.log('ERROR in ' + tag, err);
+  } else {
+    logger.log(tag + ' OK', res.body);
+  }
 };
 
 var get = (url, tag) => {
