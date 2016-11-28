@@ -37,4 +37,6 @@ var patch = (url, obj, tag) => {
 // get('/users/all');
 // post('/users', { phone: '8955555555', name: 'Gaga' });
 // get('/authentication/requestCode/8955555555');
-post('/authentication/authenticate', { pincode: 2222, phone: '8955555555' });
+// post('/authentication/authenticate', { pincode: 2222, phone: '8955555555' });
+patch('/users', { changes: { car: { model: 'wolkswagen' } }, phone: '8955555555', authKey: 'qXtvs1029dasi0w' });
+

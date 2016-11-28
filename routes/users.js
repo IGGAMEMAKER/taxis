@@ -39,6 +39,8 @@ router.get('/all', authentication.isAdmin, (req, res) => {
 });
 
 router.patch('/', authentication.isAuthenticated, (req, res) => {
+  logger.log('/users patch', req.body);
+
   var changes = req.body.changes;
   var phone = req.body.phone;
 
