@@ -6,7 +6,7 @@ var add = (object) => {
 };
 
 var all = () => {
-  return Drivers.find({});
+  return Drivers.list({});
 };
 
 var exportObject = {

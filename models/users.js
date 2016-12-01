@@ -10,10 +10,7 @@ var add = (phone, name) => {
       if (u) throw 'alreadyExists';
 
       return Users.save({ phone, name });
-    })
-    .then(r => {
-      logger.log('awr', r)
-    })
+    });
 };
 
 var getByPhone = (phone) => {
