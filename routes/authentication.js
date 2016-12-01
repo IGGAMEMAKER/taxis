@@ -3,6 +3,7 @@ var router = express.Router();
 var logger = console;
 
 var api = require('../helpers/api');
+
 var response = require('../helpers/response');
 
 router.get('/requestCode/:phone', (req, res) => {
@@ -16,7 +17,7 @@ router.get('/requestCode/:phone', (req, res) => {
       // if specified phone exists
       // save code in Users here
 
-      res.status(200).json({ message: 'ok' });
+      res.json({ msg: 'ok' });
       // sended code 2222 via SMS
     })
     .catch(response.error('', res));
@@ -29,9 +30,9 @@ router.post('/authenticate', (req, res) => {
   logger.log('code sended', phone, pincode);
 
   if (pincode === 2222) {
-    res.status(200).json({ key: 'qXtvs1029dasi0w' });
+    res.json({ authKey: 'qXtvs1029dasi0w' });
   } else {
-    res.status(401);
+    res.sendStatus(401);
   }
 });
 
