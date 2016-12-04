@@ -27,6 +27,12 @@ router.post('/', (req, res) => {
 
   logger.log(orders);
 
+  // api.users.find(userId)
+  //   .then(u => {
+  //     if (!u) return api.users.add(userId, '');
+  //
+  //     return api.orders.addList(orders, 0, []);
+  //   })
   api.orders.addList(orders, 0, [])
     .then(respond(res))
     .catch(error('', res));

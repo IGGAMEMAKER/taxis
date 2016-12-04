@@ -42,6 +42,22 @@ module.exports = function(dbAddress) {
       appearance: String, // comment to Appearance
 
       isSmoking: Boolean
+    }),
+
+    DriverPreferences: db.model('DriverPreferences', {
+      userId: String,
+      driverId: String,
+
+      mark: Number,
+      comment: String
+    }),
+
+    UserPreferences: db.model('UserPreferences', {
+      userId: String,
+      driverId: String,
+
+      mark: Number,
+      comment: String
     })
   };
 };
