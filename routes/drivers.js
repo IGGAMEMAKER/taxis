@@ -35,6 +35,24 @@ router.get('/all', authentication.isAdmin, (req, res) => {
     .catch(error('', res));
 });
 
+router.patch('/sessions/open', authentication.isDriver, (req, res) => {
+  var phone = req.driverId;
+
+  api.drivers.openSession(phone)
+    .then(respond(res))
+    .catch(error('', res));
+});
+
+router.patch('/sessions/close', authentication.isDriver, (req, res) => {
+  var phone = req.driverId;
+
+  api.drivers.closeSession(phone)
+    .then(respond(res))
+    .catch(error('', res));
+});
+
+
+
 // router.patch('/', authentication.isAuthenticated, (req, res) => {
 //   var changes = req.body.changes;
 //   var phone = req.body.phone;

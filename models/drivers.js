@@ -9,9 +9,19 @@ var all = () => {
   return Drivers.list({});
 };
 
+var openSession = (phone) => {
+  return Drivers.update({ phone }, { isSessionOpened: true });
+};
+
+var closeSession = (phone) => {
+  return Drivers.update({ phone }, { isSessionOpened: false });
+};
+
 var exportObject = {
   add,
-  all
+  all,
+  openSession,
+  closeSession
 };
 
 module.exports = exportObject;

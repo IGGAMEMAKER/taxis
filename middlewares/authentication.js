@@ -38,6 +38,7 @@ module.exports = {
     if (true) { // check authentication
       req.isDriver = true;
       req.userId = header(req, 'phone');
+      req.driverId = header(req, 'phone');
       next();
     } else {
       res.sendStatus(403);

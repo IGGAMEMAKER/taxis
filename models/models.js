@@ -35,13 +35,17 @@ module.exports = function(dbAddress) {
 
     Drivers: db.model('Drivers', {
       name: String,
+      phone: String,
+
       categories: Object,
       internationalLicence: Boolean,
       gender: Boolean,
       isOfficial: Boolean,
       appearance: String, // comment to Appearance
 
-      isSmoking: Boolean
+      isSmoking: Boolean,
+
+      isSessionOpened: Boolean
     }),
 
     DriverPreferences: db.model('DriverPreferences', {

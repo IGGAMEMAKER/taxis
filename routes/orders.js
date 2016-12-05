@@ -10,6 +10,8 @@ var response = require('../helpers/response');
 var error = response.error;
 var respond = response.respond;
 
+var STATUSES = require('../constants/order-statuses');
+
 // router.get('/', authentication.isAuthenticated, (req, res) => {
 router.get('/', (req, res) => {
   api.orders.all()
@@ -21,8 +23,9 @@ router.post('/', (req, res) => {
   var userId = req.body.phone;
   var orders = req.body.orders;
 
-  orders.forEach(o => {
-    orders.userId = userId;
+  orders.forEach((o, i) => {
+    orders[i].userId = userId;
+    orders[i].status = STATUSES.ORDER_STATUS_INITIALIZED;
   });
 
   logger.log(orders);
