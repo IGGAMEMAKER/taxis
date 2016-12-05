@@ -47,11 +47,25 @@ router.get('/all', authentication.isAdmin, (req, res) => {
     .catch(error('', res));
 });
 
+
 router.get('/clearAll', authentication.isAdmin, (req, res) => {
   api.orders.clear()
     .then(respond(res))
     .catch(error('', res));
 });
+
+// router.patch('/cancel/:orderId', authentication.check, (req, res) => {
+//   var orderId = req.params.orderId;
+//   // canceled by client
+//
+//   // or
+//
+//   // canceled by driver
+//
+//   api.orders.clear()
+//     .then(respond(res))
+//     .catch(error('', res));
+// });
 
 // router.patch('/', authentication.isAuthenticated, (req, res) => {
 //   var changes = req.body.changes;

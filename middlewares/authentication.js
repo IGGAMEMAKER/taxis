@@ -43,5 +43,14 @@ module.exports = {
     } else {
       res.sendStatus(403);
     }
+  },
+
+  check: (req, res, next) => {
+    // checks credentials and sets variables: if user is driver, or user is a client, or user is Admin
+    var phone = header(req, 'phone');
+    req.userId = phone;
+    req.isUser = true;
+    req.authenticated = true;
+    next();
   }
 };
