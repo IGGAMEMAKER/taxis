@@ -33,13 +33,18 @@ var find = (phone) => {
   return Users.find({ phone });
 };
 
+var editFavouriteAddresses = (addresses, phone) => {
+  return Users.update({ phone }, { addresses });
+};
+
 var exportObject = {
   add,
   all,
   find,
   update,
   clear,
-  getByPhone
+  getByPhone,
+  editFavouriteAddresses
 };
 
 module.exports = exportObject;

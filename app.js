@@ -7,13 +7,6 @@ var bodyParser = require('body-parser');
 
 var app = express();
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var drivers = require('./routes/drivers');
-var orders = require('./routes/orders');
-var authentication = require('./routes/authentication');
-
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -27,12 +20,16 @@ app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 // set Routes
-app.use('/', routes);
-app.use('/users', users);
-app.use('/orders', orders);
-app.use('/drivers', drivers);
-app.use('/authentication', authentication);
+app.use('/', require('./routes/index'));
+app.use('/users', require('./routes/users'));
+app.use('/orders', require('./routes/orders'));
+app.use('/drivers', require('./routes/drivers'));
+app.use('/authentication', require('./routes/authentication'));
+app.use('/userPreferences', require('./routes/userPreferences'));
+app.use('/driverPreferences', require('./routes/driverPreferences'));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

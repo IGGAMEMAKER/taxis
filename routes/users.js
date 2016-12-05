@@ -70,4 +70,13 @@ router.get('/clearAll', authentication.isAdmin, (req, res) => {
     .catch(response.error('', res));
 });
 
+router.put('/preferences/addresses', authentication.isAuthenticated, (req, res) => {
+  var addresses = req.body.addresses;
+  var phone = req.userId;
+
+  api.users.editFavouriteAddresses(addresses, phone)
+    .then(response.respond(res))
+    .catch(response.error('', res));
+});
+
 module.exports = router;
