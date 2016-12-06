@@ -54,18 +54,27 @@ router.get('/clearAll', authentication.isAdmin, (req, res) => {
     .catch(error('', res));
 });
 
-// router.patch('/cancel/:orderId', authentication.check, (req, res) => {
-//   var orderId = req.params.orderId;
-//   // canceled by client
-//
-//   // or
-//
-//   // canceled by driver
-//
-//   api.orders.clear()
-//     .then(respond(res))
-//     .catch(error('', res));
-// });
+router.patch('/cancel/:orderId', authentication.check, (req, res) => {
+  var orderId = req.params.orderId;
+  var promise;
+
+  if (req.isUser) {
+    // canceled by client
+    promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_CLIENT);
+  } else {
+    if (req.isDriver) {
+      // canceled by driver
+      promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_DRIVER);
+    } else {
+      // canceled by admin
+      promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN);
+    }
+  }
+
+  promise()
+    .then(respond(res))
+    .catch(error('', res));
+});
 
 // router.patch('/', authentication.isAuthenticated, (req, res) => {
 //   var changes = req.body.changes;

@@ -30,11 +30,16 @@ var clear = () => {
   return Orders.remove({});
 };
 
+var setStatus = (orderId, status) => {
+  return Orders.update({ _id: orderId }, { status });
+};
+
 var exportObject = {
   add,
   all,
   clear,
-  addList: saveRecursively
+  addList: saveRecursively,
+  setStatus,
 };
 
 module.exports = exportObject;
