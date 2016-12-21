@@ -14,12 +14,11 @@ var STATUSES = require('../constants/order-statuses');
 
 var transport = require('../helpers/transport');
 
-// router.get('/', authentication.isAuthenticated, (req, res) => {
-router.get('/', (req, res) => {
-  api.orders.all()
-    .then(respond(res))
-    .catch(error('', res));
-});
+var responsePromisify = require('../helpers/response-promisify');
+
+router.get('/', authentication.isAuthenticated, responsePromisify(req => {
+  return api.orders.all();
+}));
 
 var sendOrdersToOrderServer = (orders, userId) => result => {
   return transport.orderServer('/orders/add', { orders, userId });
@@ -36,62 +35,38 @@ router.post('/', (req, res) => {
 
   logger.log(orders);
 
-  // api.users.find(userId)
-  //   .then(u => {
-  //     if (!u) return api.users.add(userId, '');
-  //
-  //     return api.orders.addList(orders, 0, []);
-  //   })
   api.orders.addList(orders, 0, [])
     .then(respond(res))
     .then(sendOrdersToOrderServer(orders, userId))
     .catch(error('', res));
 });
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.orders.all()
-    .then(respond(res))
-    .catch(error('', res));
-});
+router.get('/all', authentication.isAdmin, responsePromisify(req => {
+  return api.orders.all();
+}));
 
-router.get('/clearAll', authentication.isAdmin, (req, res) => {
-  api.orders.clear()
-    .then(respond(res))
-    .catch(error('', res));
-});
+router.get('/clearAll', authentication.isAdmin, responsePromisify(req => {
+  return api.orders.clear();
+}));
 
-
-router.patch('/cancel/:orderId', authentication.check, (req, res) => {
+router.patch('/cancel/:orderId', authentication.check, responsePromisify(req => {
   var orderId = req.params.orderId;
-  var promise;
+  var status;
 
   if (req.isUser) {
     // canceled by client
-    promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_CLIENT);
+    status = STATUSES.ORDER_STATUS_CANCELED_BY_CLIENT;
   } else {
     if (req.isDriver) {
       // canceled by driver
-      promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_DRIVER);
+      status = STATUSES.ORDER_STATUS_CANCELED_BY_DRIVER;
     } else {
       // canceled by admin
-      promise = () => api.orders.setStatus(orderId, STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN);
+      status = STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN;
     }
   }
 
-  promise()
-    .then(respond(res))
-    .catch(error('', res));
-});
-
-// router.patch('/', authentication.isAuthenticated, (req, res) => {
-//   var changes = req.body.changes;
-//   var phone = req.body.phone;
-//
-//   // check parameters
-//
-//   api.users.update(phone, changes)
-//     .then(respond(res))
-//     .catch(error('', res));
-// });
+  return api.orders.setStatus(orderId, status);
+}));
 
 module.exports = router;

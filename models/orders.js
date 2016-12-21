@@ -3,7 +3,6 @@ var Orders = db.wrap('Orders');
 
 var logger = require('../helpers/logger');
 
-
 var add = (object) => {
   return Orders.save(object);
 };
@@ -37,6 +36,7 @@ var setStatus = (orderId, status) => {
 var exportObject = {
   add,
   all,
+
   clear,
   addList: saveRecursively,
   setStatus,

@@ -55,10 +55,15 @@ app.use(function(err, req, res, next) {
   });
 });
 
+var responsePromisify = require('../helpers/response-promisify');
+var api = require('../helpers/api');
+
 var checkCredentials = (req, res, next) => {
   next();
 };
 
-app.get('/orders/add', checkCredentials, )
+app.get('/orders/add', checkCredentials, responsePromisify(req => {
+  return api.orders.all();
+}));
 
 module.exports = app;
