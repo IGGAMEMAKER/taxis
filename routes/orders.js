@@ -12,12 +12,18 @@ var respond = response.respond;
 
 var STATUSES = require('../constants/order-statuses');
 
+var transport = require('../helpers/transport');
+
 // router.get('/', authentication.isAuthenticated, (req, res) => {
 router.get('/', (req, res) => {
   api.orders.all()
     .then(respond(res))
     .catch(error('', res));
 });
+
+var sendOrdersToOrderServer = (orders, userId) => result => {
+  return transport.orderServer('/orders/add', { orders, userId });
+};
 
 router.post('/', (req, res) => {
   var userId = req.body.phone;
@@ -38,6 +44,7 @@ router.post('/', (req, res) => {
   //   })
   api.orders.addList(orders, 0, [])
     .then(respond(res))
+    .then(sendOrdersToOrderServer(orders, userId))
     .catch(error('', res));
 });
 
@@ -47,12 +54,12 @@ router.get('/all', authentication.isAdmin, (req, res) => {
     .catch(error('', res));
 });
 
-
 router.get('/clearAll', authentication.isAdmin, (req, res) => {
   api.orders.clear()
     .then(respond(res))
     .catch(error('', res));
 });
+
 
 router.patch('/cancel/:orderId', authentication.check, (req, res) => {
   var orderId = req.params.orderId;

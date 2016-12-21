@@ -16,6 +16,32 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
     .catch(error('', res));
 });
 
+router.get('/:driverId', authentication.check, (req, res) => {
+  var phone = req.params.driverId;
+
+  api.drivers.getByDriverId(phone)
+    .then(driver => {
+      if (!driver) throw '404';
+
+      var object;
+      if (req.isUser) {
+        // we cannot send FULL INFO
+        object = {
+          name: driver.name,
+        };
+      } else {
+        if (req.isDriver) {
+          // we can send full info
+          object = driver;
+        }
+      }
+
+      return object;
+    })
+    .then(respond(res))
+    .catch(error('', res));
+});
+
 router.post('/', (req, res) => {
 // router.get('/ololo', (req, res) => {
   var phone = req.body.phone;
@@ -50,7 +76,6 @@ router.patch('/sessions/close', authentication.isDriver, (req, res) => {
     .then(respond(res))
     .catch(error('', res));
 });
-
 
 
 // router.patch('/', authentication.isAuthenticated, (req, res) => {

@@ -17,11 +17,16 @@ var closeSession = (phone) => {
   return Drivers.update({ phone }, { isSessionOpened: false });
 };
 
+var getByDriverId = (phone) => {
+  return Drivers.find({ phone });
+};
+
 var exportObject = {
   add,
   all,
   openSession,
-  closeSession
+  closeSession,
+  getByDriverId
 };
 
 module.exports = exportObject;
