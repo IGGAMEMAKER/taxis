@@ -5,8 +5,8 @@ var logger = require('../helpers/logger');
 var authentication = require('../middlewares/authentication');
 
 var api = require('../helpers/api');
-var response = require('../helpers/response');
 
+var response = require('../helpers/response');
 var error = response.error;
 var respond = response.respond;
 
@@ -56,14 +56,12 @@ router.patch('/cancel/:orderId', authentication.check, responsePromisify(req => 
   if (req.isUser) {
     // canceled by client
     status = STATUSES.ORDER_STATUS_CANCELED_BY_CLIENT;
+  } else if (req.isDriver) {
+    // canceled by driver
+    status = STATUSES.ORDER_STATUS_CANCELED_BY_DRIVER;
   } else {
-    if (req.isDriver) {
-      // canceled by driver
-      status = STATUSES.ORDER_STATUS_CANCELED_BY_DRIVER;
-    } else {
-      // canceled by admin
-      status = STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN;
-    }
+    // canceled by admin
+    status = STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN;
   }
 
   return api.orders.setStatus(orderId, status);

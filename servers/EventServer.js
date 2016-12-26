@@ -55,15 +55,6 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var responsePromisify = require('../helpers/response-promisify');
-var api = require('../helpers/api');
-
-var checkCredentials = (req, res, next) => {
-  next();
-};
-
-app.get('/orders/add', checkCredentials, responsePromisify(req => {
-  return api.orders.all();
-}));
+app.use('/', require('../routes/EventServer'));
 
 module.exports = app;
