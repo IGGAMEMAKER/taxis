@@ -35,7 +35,7 @@ var patch = (url, obj, tag) => {
 var authenticateAsUser = (object) => Object.assign({ phone: '8955555555', authKey: 'qXtvs1029dasi0w' }, object);
 
 module.exports = {
-  get,
+  get: get,
   post,
   patch,
   api,
