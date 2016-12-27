@@ -38,7 +38,7 @@
         url = decodeURIComponent(url[1]);
       } else {
         // url = "http://petstore.swagger.io/v2/swagger.json";
-        url = "http://localhost/docs/swagger.yaml";
+        url = "http://localhost/swagger.yaml";
       }
 
       hljs.configure({
