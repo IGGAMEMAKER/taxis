@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 
@@ -30,7 +31,18 @@ app.use('/authentication', require('./routes/authentication'));
 app.use('/userPreferences', require('./routes/userPreferences'));
 app.use('/driverPreferences', require('./routes/driverPreferences'));
 
+// app.use(express.static('public'));
+// app.use('/docs', express.static('public/docs/swagger-ui-master'));
 
+// app.use('/specification', express.static(path.join(__dirname, 'public')));
+
+app.get('/docs', (req, res) => {
+  res.sendFile('/home/gaginho/coding/taxis/public/docs/swagger-ui-master/dist/index.html');
+});
+
+app.get('/specification', (req, res) => {
+  res.sendFile('swagger.yaml', { root: __dirname + '/public/docs/' });
+});
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
