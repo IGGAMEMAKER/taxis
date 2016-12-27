@@ -50,29 +50,29 @@ var patch = (url, obj, tag) => {
   //
   // phone: '8955555555131'
 
-post('/orders', {
-  "authKey": "qXtvs1029dasi0w",
-  "orders": [
-    {
-      "asSoonAsPossible": true,
-      "clientPhone": "89653502956",
-      "destination": {
-        "center": [
-          55.75222,
-          37.61556
-        ]
-      },
-      "driverDetails": {},
-      "location": {
-        "center": [
-          55.75222,
-          37.61556
-        ]
-      },
-    }
-  ],
-  "phone": "89653502956"
-});
+// post('/orders', {
+//   "authKey": "qXtvs1029dasi0w",
+//   "orders": [
+//     {
+//       "asSoonAsPossible": true,
+//       "clientPhone": "89653502956",
+//       "destination": {
+//         "center": [
+//           55.75222,
+//           37.61556
+//         ]
+//       },
+//       "driverDetails": {},
+//       "location": {
+//         "center": [
+//           55.75222,
+//           37.61556
+//         ]
+//       },
+//     }
+//   ],
+//   "phone": "89653502956"
+// });
   // orderDate,
 
 // patch('/orders/cancel/5846d3858ca8de1b240c070e');
