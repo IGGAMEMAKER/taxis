@@ -1,5 +1,5 @@
 var header = (req, key) => {
-  return req.body[key];
+  return req.body[key] || req.query[key];
 };
 
 var mockKey = 'qXtvs1029dasi0w';

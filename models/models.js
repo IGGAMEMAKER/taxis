@@ -45,7 +45,9 @@ module.exports = function(dbAddress) {
 
       isSmoking: Boolean,
 
-      isSessionOpened: Boolean
+      isSessionOpened: Boolean,
+
+      mark: Number
     }),
 
     DriverPreferences: db.model('DriverPreferences', {

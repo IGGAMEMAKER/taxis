@@ -43,17 +43,17 @@ router.post('/', (req, res) => {
 
 router.get('/drivers', authentication.isAuthenticated, responsePromisify(req => {
   return api.drivers.all()
-    .then(drivers => {
-      return drivers.map(d => {
-        return {
-          name: d.name,
-          driverId: d.driverId,
-          mark: d.mark || 8,
-          age: d.age || 41,
-          experience: 10
-        };
-      });
-    });
+    // .then(drivers => {
+    //   return drivers.map(d => {
+    //     return {
+    //       name: d.name,
+    //       driverId: d.driverId,
+    //       mark: d.mark || 8,
+    //       age: d.age || 41,
+    //       experience: 10
+    //     };
+    //   });
+    // });
 }));
 
 router.get('/all', authentication.isAdmin, responsePromisify(req => {

@@ -21,9 +21,14 @@ var getByDriverId = (phone) => {
   return Drivers.find({ phone });
 };
 
+var clear = () => {
+  return Drivers.remove({});
+};
+
 var exportObject = {
   add,
   all,
+  clear,
   openSession,
   closeSession,
   getByDriverId

@@ -18,12 +18,18 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
 });
 
 router.get('/all', authentication.isAdmin, (req, res) => {
-  // res.json({ msg: 1 });
   api.drivers.all()
     .then(respond(res))
     .catch(error('', res));
   // res.json({ msg: 1 });
-})
+});
+
+router.get('/clearAll', authentication.isAdmin, (req, res) => {
+  api.drivers.clear()
+    .then(respond(res))
+    .catch(error('', res));
+  // res.json({ msg: 1 });
+});
 
 router.get('/:driverId', authentication.check, (req, res) => {
   var phone = req.params.driverId;
@@ -57,18 +63,14 @@ router.post('/', (req, res) => {
 
   // go to database
 
-  logger.log(phone, name);
-  api.drivers.add({ phone, name })
+  logger.log(phone, name, req.body);
+
+  var driver = Object.assign(req.body, { phone, name });
+
+  api.drivers.add(driver)
     .then(respond(res))
     .catch(error('', res));
 });
-
-// router.get('/all', (req, res) => {
-//   // api.drivers.all()
-//   //   .then(respond(res))
-//   //   .catch(error('', res));
-//   res.json({ msg: 1 });
-// });
 
 router.patch('/sessions/open', authentication.isDriver, (req, res) => {
   var phone = req.driverId;
