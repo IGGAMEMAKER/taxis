@@ -14,7 +14,16 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
   api.drivers.all()
     .then(respond(res))
     .catch(error('', res));
+  // res.json({ msg: 1 });
 });
+
+router.get('/all', authentication.isAdmin, (req, res) => {
+  // res.json({ msg: 1 });
+  api.drivers.all()
+    .then(respond(res))
+    .catch(error('', res));
+  // res.json({ msg: 1 });
+})
 
 router.get('/:driverId', authentication.check, (req, res) => {
   var phone = req.params.driverId;
@@ -43,23 +52,23 @@ router.get('/:driverId', authentication.check, (req, res) => {
 });
 
 router.post('/', (req, res) => {
-// router.get('/ololo', (req, res) => {
   var phone = req.body.phone;
   var name = req.body.name;
 
   // go to database
 
   logger.log(phone, name);
-  api.users.add(phone, name)
+  api.drivers.add({ phone, name })
     .then(respond(res))
     .catch(error('', res));
 });
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.drivers.all()
-    .then(respond(res))
-    .catch(error('', res));
-});
+// router.get('/all', (req, res) => {
+//   // api.drivers.all()
+//   //   .then(respond(res))
+//   //   .catch(error('', res));
+//   res.json({ msg: 1 });
+// });
 
 router.patch('/sessions/open', authentication.isDriver, (req, res) => {
   var phone = req.driverId;
@@ -76,17 +85,5 @@ router.patch('/sessions/close', authentication.isDriver, (req, res) => {
     .then(respond(res))
     .catch(error('', res));
 });
-
-
-// router.patch('/', authentication.isAuthenticated, (req, res) => {
-//   var changes = req.body.changes;
-//   var phone = req.body.phone;
-//
-//   // check parameters
-//
-//   api.users.update(phone, changes)
-//     .then(respond(res))
-//     .catch(error('', res));
-// });
 
 module.exports = router;
