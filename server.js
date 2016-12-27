@@ -1,7 +1,7 @@
 var app = require('./app');
 var orderServerApp = require('./servers/EventServer');
 
-var swaggerApp = require('./servers/SwaggerServer');
+// var swaggerApp = require('./servers/SwaggerServer');
 
 var server = app.listen(8888, function () {
   var host = server.address().address;
@@ -17,9 +17,9 @@ var orderServer = orderServerApp.listen(4001, function () {
   console.log('Example app listening at http://', host, port);
 });
 
-var swaggerServer = swaggerApp.listen(4000, function () {
-  var host = swaggerServer.address().address;
-  var port = swaggerServer.address().port;
-
-  console.log('Example app listening at http://', host, port);
-});
+// var swaggerServer = swaggerApp.listen(4000, function () {
+//   var host = swaggerServer.address().address;
+//   var port = swaggerServer.address().port;
+//
+//   console.log('Example app listening at http://', host, port);
+// });
