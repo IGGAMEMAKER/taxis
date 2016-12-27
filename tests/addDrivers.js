@@ -9,7 +9,8 @@ tester.post('/drivers', {
   categories: {},
   internationalLicence: 1,
   isOfficial: 1,
-  isSmoking: 0
+  isSmoking: 0,
+  isSessionOpened: 1
 });
 
 tester.post('/drivers', {
@@ -21,7 +22,9 @@ tester.post('/drivers', {
   categories: {},
   internationalLicence: 0,
   isOfficial: 1,
-  isSmoking: 0
+  isSmoking: 0,
+
+  isSessionOpened: 1
 });
 
 tester.post('/drivers', {
@@ -33,7 +36,9 @@ tester.post('/drivers', {
   categories: {},
   internationalLicence: 1,
   isOfficial: 0,
-  isSmoking: 1
+  isSmoking: 1,
+
+  isSessionOpened: 1
 });
 
 setTimeout(() => {
