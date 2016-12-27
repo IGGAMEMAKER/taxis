@@ -1,8 +1,11 @@
 var request = require('superagent');
 var Promise = require('bluebird');
 
+var configs = require('../configs');
+
 var logger = require('../helpers/logger');
-var domain = 'http://localhost:8888';
+// var domain = 'http://localhost:8888';
+var domain = configs.domain + ':8888';
 
 var api = require('../helpers/api');
 
