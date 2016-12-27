@@ -1,0 +1,665 @@
+# Example YAML to get you started quickly.
+# Be aware that YAML has indentation based scoping.
+# Code completion support is available so start typing for available options.
+swagger: '2.0'
+
+# This is your document metadata
+info:
+  version: "0.5.0"
+  title: all drivers
+  description: |
+    DESCRIPTION                                           
+    for urls with authentication, you need to send authKey and phone variables too               
+    for example (url POST /orders) :                                      
+    {                             
+      phone:'89888888888',                        
+      authKey:'ad03dj0as9dja',                                  
+      orders: [order1, order2]                              
+    }
+    models in DB
+host: '46.101.157.129'
+# Describe your paths here
+paths:
+  /authentication/authenticate:
+    post:
+      summary: mOcK
+      description: Gets pincode, checks if it is correct (and user exists) then sends authKey. Responds by sending authKey
+      parameters:
+      - name: phone
+        in: formData
+        description: 89888888888
+        type: string
+        required: true
+      - name: pincode
+        in: formData
+        type: number
+        required: true
+        description: six digit number
+      responses:
+        200:
+          description: OK. here must be auth key too
+          schema:
+            type: object
+            properties:
+              authKey:
+                type: string
+                description: it is saved both on clientside and serverside and is sended in all authenticated requests
+  /authentication/requestCode/{phone}:
+    get:
+      summary: OK
+      description: Sends pincode to a phone and generates new authKey in DB. User needs to write pincode manually to receive this authKey.
+      parameters:
+        - name: phone
+          in: path
+          description: SMS code will be sent on this phone, if the user with such phone number xists
+          required: true
+          type: string
+      responses:
+        200:
+          description: Do not need to check parameters
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+  /drivers/preferences/users:
+    get:
+      summary: OK
+      description: Gets list of `Driver` likes (TO `Users`). Needs driver authentication
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              msg:
+                type: array
+                items:
+                  $ref: '#/definitions/DriverPreference'
+    post:
+      summary: OK
+      description: Add `User` like TO `Drivers`. Needs driver authentication
+      responses:
+        200:
+          description: OK
+      parameters:
+      - name: userId
+        in: formData
+        description: userId
+        type: string
+        required: true
+      - name: driverId
+        in: formData
+        description: driverId
+        type: string
+        required: true
+      - name: mark
+        in: formData
+        description: mark from 0 to 5
+        type: number
+        required: true
+      - name: comment
+        in: formData
+        description: comment
+        type: string
+
+  /users:
+    get:
+      summary: OK
+      description: Gets `User` object, populated with current active orders. This is necessary if you need to restart your frontend app (if you don't trust clientside). ?Needs authentication
+        also, gets loyality program UID
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              msg:
+                type: object
+                properties:
+                  user:
+                    $ref: '#/definitions/User'
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Order'
+    post:
+      summary: OK
+      description: Adds new `User` to system. If user with such id/num? exists, it returns an error
+      parameters:
+        - name: phone
+          in: formData
+          description: phone
+          type: string
+          required: true
+        - name: name
+          in: formData
+          description: name
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+        500:
+          description: Error
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Error'
+    patch:
+      summary: OK
+      description: User can edit its name, contact data, car info. Needs authentication
+      parameters:
+        - name: phone
+          in: formData
+          description: phone or userId
+          type: string
+          required: true
+        - name: changes
+          in: body
+          schema:
+            $ref: '#/definitions/User'
+          required: true
+      responses:
+        200:
+          description: OK
+        500:
+          description: Error
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Error'
+  /users/all:
+    get:
+      summary: OK
+      description: Gets all registered users. Admin only. Will be used for test purposes, to check, if all is OK
+      responses:
+        200:
+          description: OK
+  /users/preferences/addresses:
+    get:
+      summary: DEPRECATED
+      description: You can get favourite places in GET /users. up to 10 favourite places
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              msg:
+                type: array
+                items:
+                  $ref: '#/definitions/Address'
+    put:
+      summary: OK
+      description: |
+        update favourite places list. example:                                 
+        [{                                              
+           center: [11.22, 33.42],                                  
+           name: 'South Park'                             
+        }]
+      parameters:
+        - name: addresses
+          in: body
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Address'
+      responses:
+        200:
+          description: OK
+  /users/preferences/drivers:
+    get:
+      summary: OK
+      description: Gets list of `User` likes (TO `Drivers`). Needs authentication
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              msg:
+                type: array
+                items:
+                  $ref: '#/definitions/UserPreference'
+    post:
+      summary: OK
+      description: Add `User` like TO `Drivers`. Needs authentication
+      parameters:
+        - name: userId
+          in: formData
+          description: userId
+          type: string
+          required: true
+        - name: driverId
+          in: formData
+          description: driverId
+          type: string
+          required: true
+        - name: mark
+          in: formData
+          description: mark from 0 to 5
+          type: number
+          required: true
+        - name: comment
+          in: formData
+          description: comment
+          type: string
+      responses:
+        200:
+          description: OK
+  /orders:
+    get:
+      summary: OK
+      description: Gets ?active `Order` objects for authenticated user
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              msg:
+                type: array
+                items:
+                  $ref: '#/definitions/Order'
+    post:
+      summary: OK
+      description: |
+        Adds list of `Order` object and returns new order ids.             
+        THIS CASE NEEDS SOME MORE DETAILED VIEW:                          
+            * when you need it in accurate time
+            * when you need it as soon as possible
+            # * when you need it now, but not in less than 5 minutes (you can wait a little)
+        ATTENTION! you need to pass an ARRAY of orders in this method!!
+        the proper object will be                                 
+        { orders: [order1, order2] }
+      parameters:
+        - name: location
+          in: body
+          description: location of client
+          required: true
+          schema:
+            $ref: '#/definitions/Address'
+        - name: destination
+          in: body
+          description: client's destination
+          schema:
+            $ref: '#/definitions/Address'
+          required: false
+        - name: asSoonAsPossible
+          in: formData
+          type: boolean
+        - name: orderDate
+          in: formData
+          required: true
+          type: string
+          format: date
+          description: time, when client needs a car. if asSoonAsPossible is false/0 you need to specify this parameter
+        - name: clientPhone
+          in: formData
+          type: string
+        - name: driverDetails
+          in: body
+          schema:
+            $ref: '#/definitions/DriverDetails'
+      responses:
+        200:
+          description: OK
+        500:
+          description: Error
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Error'
+  /orders/active:
+    get:
+      description: Gets all active `Order`s. Admin only
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              msg:
+                type: array
+                items:
+                  $ref: '#/definitions/Order'
+  /orders/all:
+    get:
+      summary: OK
+      description: Gets all `Order`s by period of time (if specified)
+      parameters:
+        - name: date1
+          in: query
+          description: format??
+          type: string
+          format: date
+        - name: date2
+          in: query
+          description: format??
+          type: string
+          format: date
+      responses:
+        200:
+          description: OK
+  /orders/cancel/:
+    patch:
+      summary: OK. partially
+      description: |
+        Cancels `Order` by orderId.
+        for authenticated user. OR, you can cancel it if you are `DRIVER`. Backend checks user
+        type (client or driver) and emits special message via Websocket:
+            * driver canceled order and client needs another driver
+            * client canceled order and no driver is needed (backend: check, if a driver is already assigned to the order you need to free him from this order)
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+      responses:
+        200:
+          description: OK
+  /orders/drivers:
+    get:
+      summary: not implemented
+      description: gets list of drivers, who are ready to pick order
+      responses:
+        200:
+          description: OK
+          schema:
+            type: object
+            properties:
+              msg:
+                type: object
+                properties:
+                  drivers:
+                    type: array
+                    items:
+                      $ref: '#/definitions/Driver'
+    patch:
+      summary: not implemented
+      description: Attaches chosen `Driver` to `Order`. Needs user authentication
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+        - name: drivers
+          in: body
+          description: array of driver Ids
+          schema:
+            type: array
+            items:
+              name: driverId
+              type: string
+      responses:
+        200:
+          description: OK
+  /orders/pick/:
+    patch:
+      summary: not implemented
+      description: pick an order by orderId. Need to be authenticated as driver
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+      responses:
+        200:
+          description: OK
+  /orders/pick-client/:
+    patch:
+      summary: not implemented
+      description: Client was picked by driver. Needs Driver authentication. Server picks driverId from auth
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+      responses:
+        200:
+          description: OK
+  /orders/driver-arrived/:
+    patch:
+      summary: not implemented
+      description: Notify client, when driver arrived to target place. Needs Driver authentication.
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+        - name: driverId
+          type: string
+          in: body
+          description: driverId
+      responses:
+        200:
+          description: OK
+  /orders/finish/:
+    patch:
+      summary: not implemented
+      description: Mark order as finished. Needs Driver authentication
+      parameters:
+        - name: orderId
+          type: string
+          in: body
+          description: orderId
+      responses:
+        200:
+          description: OK
+  /drivers:
+    post:
+      summary: OK
+      description: Adds `Driver` object
+      parameters:
+        - name: name
+          in: formData
+          description: driverName
+          type: string
+        - name: categories
+          in: body
+          description: |
+            { A: 1, B: 1 , C: 0, D: 0, E: 1 }
+          schema:
+            properties:
+              A:
+                type: number
+        - name: internationalLicence
+          in: formData
+          type: number
+          description: 1 - has international driving licence, 0 - not
+        - name: gender
+          in: formData
+          type: number
+          description: 1 - male, 0 - female
+        - name: isOfficial
+          in: formData
+          type: number
+          description: 1 - wears official clothes. 0 - not
+        - name: appearance
+          in: formData
+          type: string
+          description: comment to Appearance
+          required: false
+        - name: isSmoking
+          in: formData
+          type: number
+          description: 1 - has smoking habit. 0 - does not
+      responses:
+        200:
+          description: OK
+        500:
+          description: Error
+          schema:
+            type: object
+            items:
+              $ref: '#/definitions/Error'
+  /drivers/all:
+    get:
+      summary: OK
+      description: Gets `Driver` objects for admin user
+      responses:
+        200:
+          description: OK
+  /drivers/sessions/open:
+    patch:
+      summary: OK
+      description: Opens his session and becomes available for getting orders. Needs driver  authentication
+      responses:
+        200:
+          description: OK
+  /drivers/sessions/close:
+    patch:
+      summary: OK
+      description: Closes his session and becomes unavailable for getting orders. Needs driver authentication
+      responses:
+        200:
+          description: OK
+  /drivers/{driverId}:
+    get:
+      description: Gets `Driver` object by driverId. Seen for both User and Admin
+      responses:
+        200:
+          description: OK
+  /messages/{orderId}:
+    get:
+      description: Gets `Message` (chat) objects, which are attached to order. Needs authentication
+      responses:
+        200:
+          description: OK
+    post:
+      description: Attaches new `Message` object to `order` chat list. Needs authentication
+      responses:
+        200:
+          description: OK
+
+definitions:
+  Error:
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+  User:
+    type: object
+    properties:
+      name:
+        type: string
+      phone:
+        type: string
+      registered:
+        type: string
+        format: date
+      activated:
+        type: string
+        format: date
+      car:
+        type: object
+        properties:
+          make:
+            type: string
+          model:
+            type: string
+          carNumber:
+            type: string
+          color:
+            type: string
+  Order:
+    type: object
+    properties:
+      userId:
+        type: string
+      drivers:
+        type: array
+        items:
+          type: string
+      status:
+        type: number
+      added:
+        type: string
+        format: date
+      location:
+        type: object
+      destination:
+        type: object
+      asSoonAsPossible:
+        type: boolean
+      orderDate:
+        type: string
+        format: date
+        description: if asSoonAsPossible is false/0 you need to specify this parameter
+      clientPhone:
+        type: string
+      driverDetails:
+        $ref: '#/definitions/DriverDetails'
+      options:
+        type: object
+        description: // smoking and all such stuff. need more info from manager to fill this object
+  Driver:
+    type: object
+    properties:
+      name:
+        type: string
+      categories:
+        type: object
+      internationalLicence:
+        type: boolean
+      gender:
+        type: boolean
+      isOfficial:
+        type: boolean
+      appearance:
+        type: string
+        description: // comment to Appearance                  
+      isSmoking:
+        type: boolean
+  DriverDetails:
+    type: object
+    properties:
+      name:
+        type: string
+      categories:
+        type: object
+      internationalLicence:
+        type: boolean
+      gender:
+        type: boolean
+      isOfficial:
+        type: boolean
+      appearance:
+        type: string
+        description: // comment to Appearance                  
+      isSmoking:
+        type: boolean
+  UserPreference:
+    type: object
+    properties:
+      mark:
+        type: number
+      userId:
+        type: string
+      driverId:
+        type: string
+      comment:
+        type: string
+  DriverPreference:
+    type: object
+    properties:
+      mark:
+        type: number
+      userId:
+        type: string
+      driverId:
+        type: string
+      comment:
+        type: string
+  Address:
+    type: object
+    properties:
+      center:
+        type: array
+        items:
+          type: number
+          format: float
+      name:
+        type: string

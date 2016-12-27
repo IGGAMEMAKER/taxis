@@ -20,6 +20,7 @@ module.exports = function(dbAddress) {
     Orders: db.model('Orders', {
       userId: String,
       driverId: String,
+      drivers: Array,
       status: Number,
       added: Date, // when we received this order
 
