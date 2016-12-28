@@ -36,6 +36,14 @@ router.post('/', (req, res) => {
   logger.log(orders);
 
   api.orders.addList(orders, 0, [])
+    .then(result => {
+      return api.users.getOrSave(userId)
+        .then(r => {
+          var results = Object.assign({ result, user: r });
+
+          return results;
+        });
+    })
     .then(respond(res))
     // .then(sendOrdersToOrderServer(orders, userId))
     .catch(error('', res));

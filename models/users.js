@@ -37,6 +37,17 @@ var editFavouriteAddresses = (addresses, phone) => {
   return Users.update({ phone }, { addresses });
 };
 
+var getOrSave = (phone) => {
+  return Users.find({ phone })
+    .then(u => {
+      if (!u) {
+        return Users.save({ phone });
+      }
+
+      return u;
+    });
+};
+
 var exportObject = {
   add,
   all,
@@ -44,6 +55,7 @@ var exportObject = {
   update,
   clear,
   getByPhone,
+  getOrSave,
   editFavouriteAddresses
 };
 
