@@ -41,10 +41,12 @@ function findOne(modelName, find, parameters){
 function save(modelName, item){
   return new Promise(function (resolve, reject) {
     var ITEM = new models[modelName](item);
-    ITEM.save(function (err) {
+    // ITEM.save(function (err) {
+    ITEM.save(function (err, result) {
       if (err) return reject(err);
 
-      return resolve(item);
+      // return resolve(item);
+      return resolve(result);
     });
   });
 }
