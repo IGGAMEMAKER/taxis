@@ -12,7 +12,9 @@ var saveRecursively = (list, index, responses) => {
     return Orders.save(list[index])
       .then(r => {
         // responses.push(Object.assign({}, r, { orderId: r._id }));
-        var result = Object.assign(r, { orderId: r._id });
+        var orderId = r._id;
+        logger.log('saveRecursively', orderId);
+        var result = Object.assign(r, { orderId });
         responses.push(result);
 
         return saveRecursively(list, index + 1, responses);
