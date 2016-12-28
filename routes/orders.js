@@ -56,9 +56,9 @@ router.get('/drivers', authentication.isAuthenticated, responsePromisify(req => 
     });
 }));
 
-router.patch('/drivers', authentication.isAuthenticated, responsePromisify(req => {
-  // return api.orders.setDrivers();
-}));
+// router.patch('/drivers', authentication.isAuthenticated, responsePromisify(req => {
+//   return api.orders.setDrivers();
+// }));
 
 router.get('/all', authentication.isAdmin, responsePromisify(req => {
   return api.orders.all();
