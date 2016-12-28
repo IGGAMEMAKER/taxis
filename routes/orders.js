@@ -41,6 +41,7 @@ router.post('/', (req, res) => {
         .then(r => {
           var results = Object.assign({ result, user: r });
 
+          logger.log(results);
           return results;
         });
     })
