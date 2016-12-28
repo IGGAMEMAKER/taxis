@@ -274,34 +274,35 @@ paths:
         the proper object will be                                 
         { orders: [order1, order2] }
       parameters:
-        - name: location
+        - name: orders
           in: body
-          description: location of client
           required: true
+          description: array of orders
           schema:
-            $ref: '#/definitions/Address'
-        - name: destination
-          in: body
-          description: client's destination
-          schema:
-            $ref: '#/definitions/Address'
-          required: false
-        - name: asSoonAsPossible
-          in: formData
-          type: boolean
-        - name: orderDate
-          in: formData
-          required: true
-          type: string
-          format: date
-          description: time, when client needs a car. if asSoonAsPossible is false/0 you need to specify this parameter
-        - name: clientPhone
-          in: formData
-          type: string
-        - name: driverDetails
-          in: body
-          schema:
-            $ref: '#/definitions/DriverDetails'
+            type: array
+            items:
+              type: object
+              properties:
+                location:
+                  description: location of client
+                  required: true
+                  $ref: '#/definitions/Address'
+                destination:
+                  description: client's destination
+                  $ref: '#/definitions/Address'
+                  required: false
+                asSoonAsPossible:
+                  type: boolean
+                orderDate:
+                  required: true
+                  type: string
+                  format: date
+                  description: time, when client needs a car. if asSoonAsPossible is false/0 you need to specify this parameter
+                clientPhone:
+                  type: string
+                driverDetails:
+                  $ref: '#/definitions/DriverDetails'
+
       responses:
         200:
           description: OK
