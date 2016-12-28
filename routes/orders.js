@@ -25,6 +25,8 @@ var sendOrdersToOrderServer = (orders, userId) => result => {
 };
 
 router.post('/', (req, res) => {
+  logger.log('POST orders', req.body);
+
   var userId = req.body.phone;
   var orders = req.body.orders;
 
