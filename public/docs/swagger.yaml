@@ -275,12 +275,12 @@ paths:
         { orders: [order1, order2] }
       parameters:
         - name: phone
-          in: body
+          in: formData
           required: true
           description: user phone
           type: string
         - name: orders
-          in: body
+          in: formData
           required: true
           description: array of orders
           schema:

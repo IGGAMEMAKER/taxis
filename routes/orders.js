@@ -25,10 +25,10 @@ var sendOrdersToOrderServer = (orders, userId) => result => {
 };
 
 router.post('/', (req, res) => {
-  logger.log('POST orders', req.body);
+  logger.log('POST orders', JSreq.body);
 
   var userId = req.body.phone;
-  var orders = req.body.orders;
+  var orders = JSON.parse(req.body.orders);
 
   orders.forEach((o, i) => {
     orders[i].userId = userId;
