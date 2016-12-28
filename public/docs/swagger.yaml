@@ -274,6 +274,11 @@ paths:
         the proper object will be                                 
         { orders: [order1, order2] }
       parameters:
+        - name: phone
+          in: body
+          required: true
+          description: user phone
+          type: string
         - name: orders
           in: body
           required: true
