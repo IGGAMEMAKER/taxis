@@ -11,7 +11,7 @@ var saveRecursively = (list, index, responses) => {
   if (index < list.length) {
     return Orders.save(list[index])
       .then(r => {
-        responses.push(r);
+        responses.push(Object.assign({}, r, { orderId: r["_id"] }));
 
         return saveRecursively(list, index + 1, responses);
       });

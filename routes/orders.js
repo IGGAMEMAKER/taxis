@@ -38,13 +38,13 @@ router.post('/', (req, res) => {
   logger.log(orders);
 
   api.orders.addList(orders, 0, [])
-    .then(result => {
+    .then(results => {
       return api.users.getOrSave(userId)
         .then(r => {
-          var results = Object.assign({ result, user: r });
+          var result = Object.assign({ results, user: r });
 
-          logger.log(results);
-          return results;
+          logger.log(result);
+          return result;
         });
     })
     .then(respond(res))
