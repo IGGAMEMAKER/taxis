@@ -37,7 +37,7 @@ router.post('/', (req, res) => {
 
   api.orders.addList(orders, 0, [])
     .then(respond(res))
-    .then(sendOrdersToOrderServer(orders, userId))
+    // .then(sendOrdersToOrderServer(orders, userId))
     .catch(error('', res));
 });
 
