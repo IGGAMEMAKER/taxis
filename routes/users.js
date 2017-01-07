@@ -5,10 +5,9 @@ var logger = require('../helpers/logger');
 var authentication = require('../middlewares/authentication');
 
 var api = require('../helpers/api');
+var respond = require('../helpers/response-promisify');
 
-var response = require('../helpers/response');
-
-router.get('/', authentication.isAuthenticated, (req, res) => {
+router.get('/', authentication.isAuthenticated, respond(req => {
   // logger.log('qqq');
   // res.send('respond with a resource');
   var phone = req.userId;
@@ -17,7 +16,7 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
     phone
   };
 
-  api.users.find({ phone })
+  return api.users.find({ phone })
     .then(u => {
       if (!u) throw 'user_not_exist';
 
@@ -28,30 +27,24 @@ router.get('/', authentication.isAuthenticated, (req, res) => {
       answer.orders = o;
 
       return answer;
-    })
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+    });
+}));
 
-router.post('/', (req, res) => {
+router.post('/', respond(req => {
   var phone = req.body.phone;
   var name = req.body.name;
 
   // go to database
 
   logger.log(phone, name);
-  api.users.add(phone, name)
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+  return api.users.add(phone, name);
+}));
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.users.all()
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+router.get('/all', authentication.isAdmin, respond(req => {
+  return api.users.all();
+}));
 
-router.patch('/', authentication.isAuthenticated, (req, res) => {
+router.patch('/', authentication.isAuthenticated, respond(req => {
   logger.log('/users patch', req.body);
 
   var changes = req.body.changes;
@@ -59,24 +52,18 @@ router.patch('/', authentication.isAuthenticated, (req, res) => {
 
   // check parameters
 
-  api.users.update(phone, changes)
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+  return api.users.update(phone, changes);
+}));
 
-router.get('/clearAll', authentication.isAdmin, (req, res) => {
-  api.users.clear()
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+router.get('/clearAll', authentication.isAdmin, respond(req => {
+  return api.users.clear();
+}));
 
-router.put('/preferences/addresses', authentication.isAuthenticated, (req, res) => {
-  var addresses = req.body.addresses;
+router.put('/preferences/addresses', authentication.isAuthenticated, respond(req => {
   var phone = req.userId;
+  var addresses = req.body.addresses;
 
-  api.users.editFavouriteAddresses(addresses, phone)
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+  return api.users.editFavouriteAddresses(addresses, phone);
+}));
 
 module.exports = router;

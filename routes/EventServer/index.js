@@ -1,4 +1,4 @@
-var responsePromisify = require('../../helpers/response-promisify');
+var respond = require('../../helpers/response-promisify');
 var api = require('../../helpers/api');
 
 var express = require('express');
@@ -10,7 +10,7 @@ var checkCredentials = (req, res, next) => {
 
 var logger = require('../../helpers/logger');
 
-router.get('/orders/add', checkCredentials, responsePromisify(req => {
+router.get('/orders/add', checkCredentials, respond(req => {
   logger.log('EventServer', 'orders add', req.body);
   return api.orders.all();
 }));

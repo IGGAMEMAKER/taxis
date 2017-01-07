@@ -5,18 +5,15 @@ var logger = require('../helpers/logger');
 var authentication = require('../middlewares/authentication');
 
 var api = require('../helpers/api');
+var respond = require('../helpers/response-promisify');
 
-var response = require('../helpers/response');
-
-router.get('/', authentication.isAuthenticated, (req, res) => {
+router.get('/', authentication.isAuthenticated, respond(req => {
   var userId = req.userId;
 
-  api.userPreferences.getByUserId(userId)
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+  return api.userPreferences.getByUserId(userId);
+}));
 
-router.post('/', (req, res) => {
+router.post('/', respond(req => {
   var userId    = req.userId;
 
   var driverId  = req.body.driverId;
@@ -31,21 +28,16 @@ router.post('/', (req, res) => {
   };
 
   logger.log(driverId, userId, mark, comment);
-  api.userPreferences.add(preference)
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
 
-router.get('/all', authentication.isAdmin, (req, res) => {
-  api.userPreferences.all()
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+  return api.userPreferences.add(preference);
+}));
 
-router.get('/clearAll', authentication.isAdmin, (req, res) => {
-  api.userPreferences.clear()
-    .then(response.respond(res))
-    .catch(response.error('', res));
-});
+router.get('/all', authentication.isAdmin, respond(req => {
+  return api.userPreferences.all();
+}));
+
+router.get('/clearAll', authentication.isAdmin, respond(req => {
+  return api.userPreferences.clear();
+}));
 
 module.exports = router;

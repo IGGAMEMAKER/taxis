@@ -3,6 +3,8 @@
 // var error = response.error;
 // var respond = response.respond;
 
+var logger = require('../helpers/logger');
+
 module.exports = (responseFunction, tag) => {
   return [
     (req, res, next) => {
@@ -20,7 +22,10 @@ module.exports = (responseFunction, tag) => {
       res.json({ msg: req.data });
     },
     (err, req, res, next) => {
+      logger.error('responsePromisify ERROR in ' + req.url, err);
       res.json({ err: err });
+
+      next(err);
     }
   ];
 };
