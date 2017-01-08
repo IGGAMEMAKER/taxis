@@ -8,6 +8,6 @@ router.get('/', function(req, res, next) {
 
 router.get('/ws-test', function (req, res) {
   res.render('ws-test');
-})
+});
 
 module.exports = router;
