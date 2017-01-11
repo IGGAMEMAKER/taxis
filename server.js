@@ -40,6 +40,7 @@ function handler (req, res) {
     });
 }
 
+
 io.on('connection', function (socket) {
   console.log('hoorray. Someone Connected!', new Date());
   console.log(socket.id);
