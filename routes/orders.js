@@ -28,6 +28,8 @@ router.post('/', respond(req => {
   var userId = req.body.phone;
   var orders = JSON.parse(req.body.orders);
 
+  logger.log('JSON parsed correctly');
+
   orders.forEach((o, i) => {
     orders[i].userId = userId;
     orders[i].status = STATUSES.ORDER_STATUS_INITIALIZED;
