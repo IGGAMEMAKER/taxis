@@ -58,7 +58,7 @@ router.get('/route/price', respond(req => {
   logger.debug('destination', destination);
 
   return new Promise((resolve, reject) => {
-    resolve(1600);
+    resolve({ price: 1600, duration: 20 });
   });
 }));
 
