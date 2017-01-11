@@ -19,7 +19,7 @@ module.exports = (responseFunction, tag) => {
     },
 
     (req, res) => {
-      logger.log('promisify', req.data);
+      // logger.log('promisify', req.data);
       res.json({ msg: req.data });
     },
     (err, req, res, next) => {
@@ -36,8 +36,6 @@ module.exports = (responseFunction, tag) => {
 //     .then(respond(res))
 //     .catch(error('', res));
 // };
-
-// promisify =
 
 // promisify(req => {
 //   return api.orders.all()

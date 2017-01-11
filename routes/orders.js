@@ -52,7 +52,7 @@ router.get('/route/price', respond(req => {
   var data = req.body;
   var { destination, departure } = data;
 
-  logger.debug('/route/price/estimated', data);
+  logger.debug('/route/price', data);
   logger.debug('---------------');
   logger.debug('departure', departure);
   logger.debug('destination', destination);
