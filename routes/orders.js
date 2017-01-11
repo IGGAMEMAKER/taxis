@@ -49,13 +49,10 @@ router.post('/', respond(req => {
 }));
 
 router.get('/route/price', respond(req => {
-  var data = req.body;
-  var { destination, departure } = data;
+  var data = req.query;
+  var { destinationLatitude, departureLatitude, destinationLongitude, departureLongitude } = data;
 
   logger.debug('/route/price', data);
-  logger.debug('---------------');
-  logger.debug('departure', departure);
-  logger.debug('destination', destination);
 
   return new Promise((resolve, reject) => {
     resolve({ price: 1600, duration: 20 });
