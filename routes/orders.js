@@ -5,22 +5,24 @@ var logger = require('../helpers/logger');
 var authentication = require('../middlewares/authentication');
 
 var api = require('../helpers/api');
-var responsePromisify = require('../helpers/response-promisify');
+var respond = require('../helpers/response-promisify');
 
 var STATUSES = require('../constants/order-statuses');
 
 var transport = require('../helpers/transport');
+
+var Promise = require('bluebird');
 
 var sendOrdersToOrderServer = (orders, userId) => result => {
   return transport.orderServer('/orders/add', { orders, userId });
 };
 
 
-router.get('/', authentication.isAuthenticated, responsePromisify(req => {
+router.get('/', authentication.isAuthenticated, respond(req => {
   return api.orders.all();
 }));
 
-router.post('/', responsePromisify(req => {
+router.post('/', respond(req => {
   logger.log('POST orders', req.body);
 
   var userId = req.body.phone;
@@ -46,7 +48,21 @@ router.post('/', responsePromisify(req => {
     // .then(sendOrdersToOrderServer(orders, userId))
 }));
 
-router.get('/drivers', authentication.isAuthenticated, responsePromisify(req => {
+router.get('/route/price', respond(req => {
+  var data = req.body;
+  var { destination, departure } = data;
+
+  logger.debug('/route/price/estimated', data);
+  logger.debug('---------------');
+  logger.debug('departure', departure);
+  logger.debug('destination', destination);
+
+  return new Promise((resolve, reject) => {
+    resolve(1600);
+  });
+}));
+
+router.get('/drivers', authentication.isAuthenticated, respond(req => {
   return api.drivers.all()
     .then(drivers => {
       return drivers.map(d => {
@@ -61,19 +77,19 @@ router.get('/drivers', authentication.isAuthenticated, responsePromisify(req => 
     });
 }));
 
-// router.patch('/drivers', authentication.isAuthenticated, responsePromisify(req => {
+// router.patch('/drivers', authentication.isAuthenticated, respond(req => {
 //   return api.orders.setDrivers();
 // }));
 
-router.get('/all', authentication.isAdmin, responsePromisify(req => {
+router.get('/all', authentication.isAdmin, respond(req => {
   return api.orders.all();
 }));
 
-router.get('/clearAll', authentication.isAdmin, responsePromisify(req => {
+router.get('/clearAll', authentication.isAdmin, respond(req => {
   return api.orders.clear();
 }));
 
-router.patch('/cancel/:orderId', authentication.check, responsePromisify(req => {
+router.patch('/cancel/:orderId', authentication.check, respond(req => {
   var orderId = req.params.orderId;
   var status;
 

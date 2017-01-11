@@ -22,7 +22,7 @@ module.exports = (responseFunction, tag) => {
       res.json({ msg: req.data });
     },
     (err, req, res, next) => {
-      logger.error('responsePromisify ERROR in ' + req.url, err);
+      logger.error('response-promisify ERROR in ' + req.url, err);
       res.json({ err: err });
 
       next(err);
