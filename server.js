@@ -11,23 +11,14 @@ var server = app.listen(8888, function () {
 });
 
 // var http = require('http');
-// var orderServer = http.createServer(orderServerApp);
-// var io = require('socket.io').listen(orderServer);
+// var eventServer = http.createServer(orderServerApp);
+// var io = require('socket.io').listen(eventServer);
 
-// orderServer.listen(4001);
+// eventServer.listen(4001);
 
-var orderServer = orderServerApp.listen(4001, function () {
-  var host = orderServer.address().address;
-  var port = orderServer.address().port;
+var eventServer = require('./servers/EventServer');
 
-  console.log('Example app listening at http://', host, port);
-});
-
-// handle WS connections
-var io = require('socket.io')(orderServer);
-var fs = require('fs');
-
-function handler (req, res) {
+function handler(req, res) {
   fs.readFile(__dirname + '/index.html',
     function (err, data) {
       if (err) {
@@ -39,17 +30,3 @@ function handler (req, res) {
       res.end(data);
     });
 }
-
-
-io.on('connection', function (socket) {
-  console.log('hoorray. Someone Connected!', new Date());
-  console.log(socket.id);
-  // console.log(socket.rooms);
-  // console.log(socket.client.request);
-
-  socket.emit('news', { hello: 'world' });
-
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});

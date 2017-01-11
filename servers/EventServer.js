@@ -20,6 +20,7 @@ app.use(cookieParser());
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
+var devErrorHandler = require('../middlewares/error-handler');
 
 // set Routes
 // app.use('/', require('./routes/index'));
@@ -36,13 +37,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err
-    });
-  });
+  app.use(devErrorHandler);
 }
 
 // production error handler
@@ -55,6 +50,40 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.use('/', require('../routes/EventServer'));
+var respond = require('../helpers/response-promisify');
+var api = require('../helpers/api');
+
+var checkCredentials = (req, res, next) => {
+  next();
+};
+
+// app.get('/orders/add', checkCredentials, respond(req => {
+//   logger.log('EventServer', 'orders add', req.body);
+//   return api.orders.all();
+// }));
+
+
+var eventServer = app.listen(4001, function () {
+  var host = eventServer.address().address;
+  var port = eventServer.address().port;
+
+  console.log('Example app listening at http://', host, port);
+});
+
+var io = require('socket.io')(eventServer);
+// var fs = require('fs');
+
+io.on('connection', function (socket) {
+  console.log('hoorray. Someone Connected!', new Date());
+  console.log(socket.id);
+  // console.log(socket.rooms);
+  // console.log(socket.client.request);
+
+  // socket.emit('news', { hello: 'world' });
+
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
 module.exports = app;
