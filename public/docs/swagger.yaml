@@ -329,6 +329,41 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Order'
+  /orders/route/price:
+    get:
+      description: Calculate estimated `Order` price.
+      parameters:
+        - name: destinationLatitude
+          type: number
+          in: query
+          description: destinationLatitude
+        - name: departureLatitude
+          type: number
+          in: query
+          description: departureLatitude
+        - name: destinationLongtitude
+          type: number
+          in: query
+          description: destinationLongitude
+        - name: departureLongtitude
+          type: number
+          in: query
+          description: departureLongitude
+      responses:
+        200:
+          description: OK
+          schema:
+            properties:
+              msg:
+                type: object
+                properties:
+                  duration:
+                    type: number
+                    description: length of route in minutes
+                  price:
+                    type: number
+                    description: cost of route in rubles
+                    
   /orders/all:
     get:
       summary: OK
