@@ -17,7 +17,7 @@ var tester = require('../helpers/tester');
   //
   // phone: '8955555555131'
 
-post('/orders', {
+tester.post('/orders', {
   "authKey": "qXtvs1029dasi0w",
   "orders": [
     {
