@@ -19,6 +19,7 @@ module.exports = (responseFunction, tag) => {
     },
 
     (req, res) => {
+      logger.log('promisify', req.data);
       res.json({ msg: req.data });
     },
     (err, req, res, next) => {
