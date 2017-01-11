@@ -8,8 +8,8 @@ var bodyParser = require('body-parser');
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -57,12 +57,6 @@ var checkCredentials = (req, res, next) => {
   next();
 };
 
-// app.get('/orders/add', checkCredentials, respond(req => {
-//   logger.log('EventServer', 'orders add', req.body);
-//   return api.orders.all();
-// }));
-
-
 var eventServer = app.listen(4001, function () {
   var host = eventServer.address().address;
   var port = eventServer.address().port;
@@ -79,7 +73,7 @@ io.on('connection', function (socket) {
   // console.log(socket.rooms);
   // console.log(socket.client.request);
 
-  // socket.emit('news', { hello: 'world' });
+  socket.emit('news', { hello: 'world' });
 
   socket.on('my other event', function (data) {
     console.log(data);

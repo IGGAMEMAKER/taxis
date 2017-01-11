@@ -1,5 +1,5 @@
 var app = require('./app');
-var orderServerApp = require('./servers/EventServer');
+// var orderServerApp = require('./servers/EventServer');
 
 // var swaggerApp = require('./servers/SwaggerServer');
 
