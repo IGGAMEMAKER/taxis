@@ -13,10 +13,11 @@ var transport = require('../helpers/transport');
 
 var Promise = require('bluebird');
 
+var orderNotifier = require('../helpers/notifications/orders');
+
 var sendOrdersToOrderServer = (orders, userId) => result => {
   return transport.orderServer('/orders/add', { orders, userId });
 };
-
 
 router.get('/', authentication.isAuthenticated, respond(req => {
   return api.orders.all();
@@ -45,10 +46,24 @@ router.post('/', respond(req => {
           var result = Object.assign({ results, user: r });
 
           logger.log(result);
+
+          results.forEach((rrr) => {
+            orderNotifier.addOrder(rrr._id)
+              .then(a => {
+                logger.log('orderNotifier', rrr, a);
+              });
+          });
+
           return result;
         });
     });
     // .then(sendOrdersToOrderServer(orders, userId))
+}));
+
+router.get('/test-event/:id', respond(req => {
+  var orderId = req.params.id;
+
+  return orderNotifier.addOrder(orderId);
 }));
 
 router.get('/route/price', respond(req => {

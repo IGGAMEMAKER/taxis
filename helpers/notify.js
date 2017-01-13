@@ -1,9 +1,9 @@
 var Promise = require('bluebird');
 var request = require('superagent');
 
-var eventServerAddress = 'localhost:4000';
+var eventServerAddress = 'localhost:4001/orders/event';
 
-var notify = (channel, object, push) => {
+var notify = (channel, event, data, push) => {
   // channel / tag
   // object, which you want to transfer
   // push - boolean. Push or not if websocket send failed/did not received result
@@ -11,7 +11,7 @@ var notify = (channel, object, push) => {
   // send it to event server and it will proxy this
   return new Promise((resolve, reject) => {
     request
-      .post(eventServerAddress, { channel, object, push })
+      .post(eventServerAddress, { channel, event, data, push })
       .end((err, res) => {
         if (err) {
           reject(err);

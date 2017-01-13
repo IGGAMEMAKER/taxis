@@ -49,4 +49,4 @@ tester.post('/orders', {
 
 // get('/drivers/all')
 
-tester.get('/orders/drivers?phone=8955555555&authKey=qXtvs1029dasi0w');
+// tester.get('/orders/drivers?phone=8955555555&authKey=qXtvs1029dasi0w');

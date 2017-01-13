@@ -56,6 +56,7 @@ var api = require('../helpers/api');
 var checkCredentials = (req, res, next) => {
   next();
 };
+var mockerPromise = require('../helpers/promise-mock');
 
 var eventServer = app.listen(4001, function () {
   var host = eventServer.address().address;
@@ -79,5 +80,23 @@ io.on('connection', function (socket) {
     console.log(data);
   });
 });
+
+var emit = (channel, event, data, push) => {
+  io.of(channel).emit(event, data);
+};
+
+// app.post('/orders/rooms/:id', respond(req => {
+//   var orderId = req.params.id;
+//
+//   emit('/orders/' + orderId, 'orderAdded', { date: new Date, orderId });
+//   return mockerPromise(orderId);
+// }));
+
+app.post('/orders/event', respond(req => {
+  var { channel, event, data, push } = req.body;
+
+  emit(channel, event, data);
+  return mockerPromise({ msg: req.body });
+}));
 
 module.exports = app;
