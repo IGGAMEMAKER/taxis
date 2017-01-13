@@ -10,17 +10,17 @@ module.exports = {
   },
   pickOrder: (id, driverId) => {
     // can be fired more than once per order
-    return notify(id, 'pick-order', driverId);
+    return notify(id, 'pick-order', { driverId });
   },
 
   driverArrived: (id, driverId) => {
     // can be fired more than once (depends on needed number of drivers)
-    return notify(id, 'driver-arrived', driverId);
+    return notify(id, 'driver-arrived', { driverId });
   },
 
   driverChosen: (id, drivers) => {
     // will be fired once (if user will not be able to edit driver list)
-    return notify(id, 'driver-chosen', drivers);
+    return notify(id, 'driver-chosen', { drivers });
   },
 
   clientPicked: (id) => {

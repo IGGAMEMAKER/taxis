@@ -5,15 +5,55 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var respond = require('../helpers/response-promisify');
+var api = require('../helpers/api');
+
+var mockerPromise = require('../helpers/promise-mock');
+
+var checkCredentials = (req, res, next) => {
+  next();
+};
+
+var logger2 = require('../helpers/logger');
 var app = express();
 
+var firer = express();
+
+var eventFirer = firer.listen(4001, function () {
+  var host = eventFirer.address().address;
+  var port = eventFirer.address().port;
+
+  console.log('eventFirer app listening at http://', host, port);
+});
+
+var io = require('socket.io')(eventFirer);
+// var fs = require('fs');
+
+io.on('connection', function (socket) {
+  console.log('hoorray. Someone Connected!', new Date());
+  console.log(socket.id);
+  // console.log(socket.rooms);
+  // console.log(socket.client.request);
+
+  socket.emit('news', { hello: 'world' });
+
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
+
+var emit = (channel, event, data, push) => {
+  logger2.log('EMIT WS: ', channel, event);
+  io.of(channel).emit(event, data);
+};
+
 // view engine setup
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'jade');
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -24,6 +64,15 @@ var devErrorHandler = require('../middlewares/error-handler');
 
 // set Routes
 // app.use('/', require('./routes/index'));
+app.post('/orders/event', respond(req => {
+  logger2.log('POST /orders/event', req.body);
+  var { channel, event, data, push } = req.body;
+
+  emit(channel, event, data);
+  logger2.log('emited');
+  return mockerPromise({ msg: req.body });
+}));
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -50,40 +99,17 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var respond = require('../helpers/response-promisify');
-var api = require('../helpers/api');
-
-var checkCredentials = (req, res, next) => {
-  next();
-};
-var mockerPromise = require('../helpers/promise-mock');
-
-var eventServer = app.listen(4001, function () {
+var eventServer = app.listen(4000, function () {
   var host = eventServer.address().address;
   var port = eventServer.address().port;
 
   console.log('Example app listening at http://', host, port);
 });
 
-var io = require('socket.io')(eventServer);
-// var fs = require('fs');
+// setInterval(() => {
+//   emit('/orders/aosjdaoisdj', 'orderAdded', {});
+// }, 1000);
 
-io.on('connection', function (socket) {
-  console.log('hoorray. Someone Connected!', new Date());
-  console.log(socket.id);
-  // console.log(socket.rooms);
-  // console.log(socket.client.request);
-
-  socket.emit('news', { hello: 'world' });
-
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
-
-var emit = (channel, event, data, push) => {
-  io.of(channel).emit(event, data);
-};
 
 // app.post('/orders/rooms/:id', respond(req => {
 //   var orderId = req.params.id;
@@ -91,12 +117,5 @@ var emit = (channel, event, data, push) => {
 //   emit('/orders/' + orderId, 'orderAdded', { date: new Date, orderId });
 //   return mockerPromise(orderId);
 // }));
-
-app.post('/orders/event', respond(req => {
-  var { channel, event, data, push } = req.body;
-
-  emit(channel, event, data);
-  return mockerPromise({ msg: req.body });
-}));
 
 module.exports = app;

@@ -1,0 +1,16 @@
+script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js").
+script.
+  var orderId = "#{orderId}"
+  console.log('orderId', orderId);
+  // var socket = io('http://46.101.157.129:4001/orders/' + orderId);
+  var socket = io('http://localhost:4001/orders/' + orderId);
+  //  var socket = io('http://localhost:4001');
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+  socket.on('orderAdded', function (data) {
+    console.log('HOHO! orderAdded!', data);
+    socket.emit('got orderAdded event', { my: 'orderAdded' });
+  });
