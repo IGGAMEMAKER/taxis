@@ -64,10 +64,20 @@ var devErrorHandler = require('../middlewares/error-handler');
 
 // set Routes
 // app.use('/', require('./routes/index'));
+
+var orders = {};
+
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
   var { channel, event, data, push } = req.body;
 
+  if (event === 'orderAdded') {
+    var orderId = data.orderId;
+    orders[orderId] = io.of('/orders/' + data.orderId);
+    orders[orderId].on('connection', function(socket) {
+      console.log('someone connected to order', orderId);
+    });
+  }
   emit(channel, event, data);
   logger2.log('emited');
   return mockerPromise({ msg: req.body });

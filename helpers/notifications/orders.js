@@ -1,7 +1,7 @@
 var notifier = require('../notify');
 
 var notify = (id, event, object) => {
-  return notifier.notify('/orders/' + id, event, object);
+  return notifier.notify('/orders/' + id, event, Object.assign(object, { orderId: id }));
 };
 
 module.exports = {

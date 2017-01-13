@@ -14,3 +14,19 @@ script.
     console.log('HOHO! orderAdded!', data);
     socket.emit('got orderAdded event', { my: 'orderAdded' });
   });
+
+  socket.on('pick-order', function (data) {
+    console.log('HOHO! pick-order!', data);
+  });
+  socket.on('driver-arrived', function (data) {
+    console.log('HOHO! driver-arrived!', data);
+  });
+  socket.on('driver-chosen', function (data) {
+    console.log('HOHO! driver-chosen!', data);
+  });
+  socket.on('client-picked', function (data) {
+    console.log('HOHO! client-picked!', data);
+  });
+  socket.on('order-finished', function (data) {
+    console.log('HOHO! order-finished!', data);
+  });

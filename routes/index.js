@@ -26,7 +26,6 @@ router.get('/order-test/:id', function (req, res) {
   setTimeout(() => { orderNotifier.driverChosen(orderId, drivers); }, 7000);
   setTimeout(() => { orderNotifier.clientPicked(orderId); }, 9000);
   setTimeout(() => { orderNotifier.orderFinished(orderId); }, 11000);
-  // setTimeout(() => { orderNotifier.addOrder(orderId); }, 1000);
 });
 
 // setInterval(() => { orderNotifier.addOrder('aosjdaoisdj'); }, 3000);
