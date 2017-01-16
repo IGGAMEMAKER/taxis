@@ -78,6 +78,7 @@ app.post('/orders/event', respond(req => {
       console.log('someone connected to order', orderId);
     });
   }
+
   emit(channel, event, data);
   logger2.log('emited');
   return mockerPromise({ msg: req.body });

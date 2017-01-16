@@ -7,7 +7,7 @@ var server = app.listen(8888, function () {
   var host = server.address().address;
   var port = server.address().port;
 
-  console.log('Example app listening at http://', host, port);
+  console.log('main app listening at http://', host, port);
 });
 
 // var http = require('http');
@@ -17,6 +17,15 @@ var server = app.listen(8888, function () {
 // eventServer.listen(4001);
 
 var eventServer = require('./servers/EventServer');
+
+// var mapApp = require('./servers/MapServer');
+//
+// var mapServer = mapApp.listen(4005, function () {
+//   var host = mapServer.address().address;
+//   var port = mapServer.address().port;
+//
+//   console.log('mapServer app listening at http://', host, port);
+// });
 
 function handler(req, res) {
   fs.readFile(__dirname + '/index.html',
