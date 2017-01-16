@@ -142,6 +142,7 @@ calculateRoutePrice(55.854330, 55.749972, 37.265097, 37.602590)
 router.get('/route/price', respond(req => {
   // test url:
   // http://localhost/orders/route/price?destinationLatitude=46.340056&departureLatitude=46.340863&destinationLongitude=48.036575&departureLongitude=48.040362
+  // http://localhost/orders/route/price?destinationLatitude=55.854330&departureLatitude=55.749972&destinationLongitude=37.265097&departureLongitude=37.602590
 
   const {
     destinationLatitude,
