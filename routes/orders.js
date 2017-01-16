@@ -68,36 +68,39 @@ router.get('/test-event/:id', respond(req => {
 
   return orderNotifier.addOrder(orderId);
 }));
+const map = require('../helpers/maps/moscow');
+
+const dotInMapPolygon = require('../helpers/dot-in-map-polygon');
 
 const computeRoutePathPrice = (start, end, duration) => {
   // start and end are objects with structure
   // { lat: value, lng: value }
 
-  return duration;
+  // nonMKAD is 5 times more expensive than MKAD
+  // 55.854330, 37.265097
+  const isInPolygon = dotInMapPolygon(map, start.lat, start.lng);
+  if (isInPolygon) {
+    logger.log('isMKAD', start);
+    return duration;
+  }
+
+  logger.log('NO MKAD', start);
+  return duration * 5;
+  // return duration;
 };
 
-router.get('/route/price', respond(req => {
-  // test url:
-  // http://localhost/orders/route/price?destinationLatitude=46.340056&departureLatitude=46.340863&destinationLongitude=48.036575&departureLongitude=48.040362
-  const { query } = req;
-
+const calculateRoutePrice = (destinationLatitude, departureLatitude, destinationLongitude, departureLongitude) => {
   let totalDuration;
-  const {
-    destinationLatitude,
-    departureLatitude,
-    destinationLongitude,
-    departureLongitude
-  } = query;
 
   logger.debug(`/route/price ${destinationLatitude}, ${destinationLongitude}`);
   logger.debug(`${departureLatitude}, ${departureLongitude}`);
 
-  var key = 'AIzaSyCL921mwdCIwz4uKJOjBfRAFDmRmZLgjPY';
+  const key = 'AIzaSyCL921mwdCIwz4uKJOjBfRAFDmRmZLgjPY';
 
-  var origin = `${departureLatitude},${departureLongitude}`;
-  var destination = `${destinationLatitude},${destinationLongitude}`;
+  const origin = `${departureLatitude},${departureLongitude}`;
+  const destination = `${destinationLatitude},${destinationLongitude}`;
 
-  var url = 'https://maps.googleapis.com/maps/api/directions';
+  const url = 'https://maps.googleapis.com/maps/api/directions';
 
   return new Promise((resolve, reject) => {
     request
@@ -131,6 +134,23 @@ router.get('/route/price', respond(req => {
         resolve({ price, duration: totalDuration });
       });
   });
+};
+
+calculateRoutePrice(55.854330, 55.749972, 37.265097, 37.602590)
+  .then(logger.log);
+
+router.get('/route/price', respond(req => {
+  // test url:
+  // http://localhost/orders/route/price?destinationLatitude=46.340056&departureLatitude=46.340863&destinationLongitude=48.036575&departureLongitude=48.040362
+
+  const {
+    destinationLatitude,
+    departureLatitude,
+    destinationLongitude,
+    departureLongitude
+  } = req.query;
+
+  return calculateRoutePrice(destinationLatitude, departureLatitude, destinationLongitude, departureLongitude);
 }));
 
 router.get('/drivers', authentication.isAuthenticated, respond(req => {
