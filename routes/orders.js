@@ -125,7 +125,7 @@ const calculateRoutePrice = (destinationLatitude, departureLatitude, destination
           return { duration, start, end, price };
         });
 
-        logger.log(result);
+        // logger.log(result);
 
         const price = result.map(r => r.price).reduce((p, c) => p + c);
 

@@ -10,8 +10,8 @@ module.exports = (map, lat, lng) => {
   i = j = c = 0;
   const nvert = map.length;
 
-  const vertx = map.map(point => point[1]);
-  const verty = map.map(point => point[2]);
+  const vertx = map.map(point => point[2]);
+  const verty = map.map(point => point[1]);
 
   for (i = 0, j = nvert - 1; i < nvert; j = i++) {
     if ( ((verty[i] > testy) != (verty[j] > testy)) &&
