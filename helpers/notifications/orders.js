@@ -8,6 +8,8 @@ module.exports = {
   addOrder: (id) => {
     return notify(id, 'orderAdded', {});
   },
+
+
   pickOrder: (id, driverId) => {
     // can be fired more than once per order
     return notify(id, 'pick-order', { driverId });

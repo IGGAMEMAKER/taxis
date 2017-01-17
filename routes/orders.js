@@ -50,7 +50,13 @@ router.post('/', respond(req => {
 
           logger.log(result);
 
-          const orderNotifiersArray = results.responses.map(rrr => orderNotifier.addOrder(rrr._id));
+          const orderNotifiersArray = results.responses.map(rrr => {
+            const orderId = rrr._id;
+
+            logger.debug(`create room in order ${orderId}`);
+
+            return orderNotifier.addOrder(orderId);
+          });
 
           return Promise.all(orderNotifiersArray)
             .then(notificationAnswersList => {
