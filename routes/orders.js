@@ -50,7 +50,7 @@ router.post('/', respond(req => {
 
           logger.log(result);
 
-          results.forEach((rrr) => {
+          results.responses.forEach((rrr) => {
             orderNotifier.addOrder(rrr._id)
               .then(a => {
                 logger.log('orderNotifier', rrr, a);
@@ -86,7 +86,6 @@ const computeRoutePathPrice = (start, end, duration) => {
 
   logger.log('NO MKAD', start);
   return duration * 5;
-  // return duration;
 };
 
 const calculateRoutePrice = (destinationLatitude, departureLatitude, destinationLongitude, departureLongitude) => {
