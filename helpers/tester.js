@@ -21,18 +21,21 @@ var log = tag => (err, res) => {
 };
 
 var get = (url, tag) => {
-  request.get(domain + url)
+  request
+    .get(domain + url)
     .end(log(`GET ${url}`));
 };
 
 var post = (url, obj, tag) => {
-  request.post(domain + url)
+  request
+    .post(domain + url)
     .send(obj)
     .end(log(`POST ${url}`));
 };
 
 var patch = (url, obj, tag) => {
-  request.patch(domain + url)
+  request
+    .patch(domain + url)
     .send(obj)
     .end(log(`PATCH ${url}`));
 };

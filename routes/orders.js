@@ -22,6 +22,8 @@ var sendOrdersToOrderServer = (orders, userId) => result => {
   return transport.orderServer('/orders/add', { orders, userId });
 };
 
+сonst createRoomsForOrders = 
+
 router.get('/', authentication.isAuthenticated, respond(req => {
   return api.orders.all();
 }));
@@ -50,14 +52,13 @@ router.post('/', respond(req => {
 
           logger.log(result);
 
-          results.responses.forEach((rrr) => {
-            orderNotifier.addOrder(rrr._id)
-              .then(a => {
-                logger.log('orderNotifier', rrr, a);
-              });
-          });
+          const orderNotifiersArray = results.responses.map(rrr => orderNotifier.addOrder(rrr._id));
 
-          return result;
+          return Promise.all(orderNotifiersArray)
+            .then(notificationAnswersList => {
+              logger.log('POST /orders notifications', notificationAnswersList);
+              return result;
+            });
         });
     });
     // .then(sendOrdersToOrderServer(orders, userId))
