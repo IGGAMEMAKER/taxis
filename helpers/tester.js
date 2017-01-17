@@ -14,25 +14,27 @@ var log = tag => (err, res) => {
     logger.log('ERROR in ' + tag, err);
     logger.log('ERROR in ' + tag, err.status);
   } else {
-    logger.log(tag + ' OK', res.body);
+    logger.log(tag + ' OK');
+    logger.dir(res.body);
+    logger.log('----------');
   }
 };
 
 var get = (url, tag) => {
   request.get(domain + url)
-    .end(log(url));
+    .end(log(`GET ${url}`));
 };
 
 var post = (url, obj, tag) => {
   request.post(domain + url)
     .send(obj)
-    .end(log(url));
+    .end(log(`POST ${url}`));
 };
 
 var patch = (url, obj, tag) => {
   request.patch(domain + url)
     .send(obj)
-    .end(log(url));
+    .end(log(`PATCH ${url}`));
 };
 
 var authenticateAsUser = (object) => Object.assign({ phone: '8955555555', authKey: 'qXtvs1029dasi0w' }, object);
