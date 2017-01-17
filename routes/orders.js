@@ -22,8 +22,6 @@ var sendOrdersToOrderServer = (orders, userId) => result => {
   return transport.orderServer('/orders/add', { orders, userId });
 };
 
-сonst createRoomsForOrders = 
-
 router.get('/', authentication.isAuthenticated, respond(req => {
   return api.orders.all();
 }));
