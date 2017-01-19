@@ -45,8 +45,10 @@ router.get('/:driverId', authentication.check, respond(req => {
 }));
 
 router.post('/', respond(req => {
-  var phone = req.body.phone;
-  var name = req.body.name;
+  const body = req.body;
+  logger.log('POST /drivers', body);
+  var phone = body.phone;
+  var name = body.name;
 
   const defaultDriver = {
     gender: 1,
@@ -58,9 +60,9 @@ router.post('/', respond(req => {
   };
   // go to database
 
-  logger.log(phone, name, req.body);
+  logger.log(phone, name, body);
 
-  var driver = Object.assign(defaultDriver, req.body);
+  var driver = Object.assign(defaultDriver, body);
 
   return api.drivers.add(driver)
     .then(result => {
