@@ -52,13 +52,15 @@ router.post('/', respond(req => {
     gender: 1,
     internationalLicence: 0,
     isOfficial: 0,
-    isSmoking: 0
+    isSmoking: 0,
+    phone,
+    name
   };
   // go to database
 
   logger.log(phone, name, req.body);
 
-  var driver = Object.assign(defaultDriver, req.body, { phone, name });
+  var driver = Object.assign(defaultDriver, req.body);
 
   return api.drivers.add(driver)
     .then(result => {
