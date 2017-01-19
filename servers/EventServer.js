@@ -74,8 +74,13 @@ app.post('/orders/event', respond(req => {
   if (event === 'orderAdded') {
     var orderId = data.orderId;
     orders[orderId] = io.of('/orders/' + data.orderId);
+
     orders[orderId].on('connection', function(socket) {
       console.log('someone connected to order', orderId);
+    });
+
+    orders[orderId].on('disconnect', function(socket) {
+      console.log('someone disconnected from order', orderId);
     });
   }
 

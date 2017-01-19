@@ -15,12 +15,17 @@ router.get('/ws-test', function (req, res) {
 router.get('/order-test/:id', function (req, res) {
   var orderId = req.params.id;
 
-  res.render('order-test', { orderId });
+  orderNotifier.addOrder(orderId)
+    .then(r => {
+      res.render('order-test', { orderId });
+    })
+    .catch(err => {
+      res.json({ err });
+    });
 
   var driverId = '10jda08shda09s0d';
   var drivers = [driverId, driverId + 'asld2'];
 
-  setTimeout(() => { orderNotifier.addOrder(orderId); }, 1000);
   setTimeout(() => { orderNotifier.pickOrder(orderId, driverId); }, 3000);
   setTimeout(() => { orderNotifier.driverArrived(orderId, driverId); }, 5000);
   setTimeout(() => { orderNotifier.driverChosen(orderId, drivers); }, 7000);

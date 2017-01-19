@@ -10,7 +10,9 @@ var respond = require('../helpers/response-promisify');
 router.get('/', authentication.isAuthenticated, respond(req => {
   // logger.log('qqq');
   // res.send('respond with a resource');
+
   var phone = req.userId;
+  logger.log('GET /users', phone);
 
   var answer = {
     phone

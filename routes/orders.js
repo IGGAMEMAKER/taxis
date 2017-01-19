@@ -73,6 +73,7 @@ router.get('/test-event/:id', respond(req => {
 
   return orderNotifier.addOrder(orderId);
 }));
+
 const map = require('../helpers/maps/moscow');
 
 const dotInMapPolygon = require('../helpers/dot-in-map-polygon');
