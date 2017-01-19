@@ -11,7 +11,7 @@ tester.post('/drivers', {
   isOfficial: 1,
   isSmoking: 0,
   isSessionOpened: 1
-})
-.then(r => {
-  console.log('result', r);
 });
+// .then(r => {
+//   console.log('result', r);
+// });
