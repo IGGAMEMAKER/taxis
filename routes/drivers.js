@@ -48,13 +48,24 @@ router.post('/', respond(req => {
   var phone = req.body.phone;
   var name = req.body.name;
 
+  const defaultDriver = {
+    gender: 1,
+    internationalLicence: 0,
+    isOfficial: 0,
+    isSmoking: 0
+  };
   // go to database
 
   logger.log(phone, name, req.body);
 
-  var driver = Object.assign(req.body, { phone, name });
+  var driver = Object.assign(defaultDriver, req.body, { phone, name });
 
-  return api.drivers.add(driver);
+  return api.drivers.add(driver)
+    .then(result => {
+      logger.log(result);
+
+      return result;
+    });
 }));
 
 router.patch('/sessions/open', authentication.isDriver, respond(req => {
