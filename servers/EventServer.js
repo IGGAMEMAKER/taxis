@@ -67,7 +67,7 @@ var devErrorHandler = require('../middlewares/error-handler');
 
 var orders = {};
 
-app.post('/rooms', )
+// app.post('/rooms', )
 
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
