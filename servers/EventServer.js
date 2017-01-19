@@ -67,6 +67,8 @@ var devErrorHandler = require('../middlewares/error-handler');
 
 var orders = {};
 
+app.post('/rooms', )
+
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
   var { channel, event, data, push } = req.body;
@@ -77,6 +79,7 @@ app.post('/orders/event', respond(req => {
 
     orders[orderId].on('connection', function(socket) {
       console.log('someone connected to order', orderId);
+      socket.emit(event, data);
       setTimeout(() => {
         emit(channel, event, data);
       }, 1000);
