@@ -77,6 +77,9 @@ app.post('/orders/event', respond(req => {
 
     orders[orderId].on('connection', function(socket) {
       console.log('someone connected to order', orderId);
+      setTimeout(() => {
+        emit(channel, event, data);
+      }, 1000);
     });
 
     orders[orderId].on('disconnect', function(socket) {
