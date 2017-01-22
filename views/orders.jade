@@ -15,7 +15,7 @@ script.
 
   var socket = io('http://46.101.157.129:4001/');
 
-  var driversRoom = socket('/drivers');
+  var driversRoom = io('http://46.101.157.129:4001/drivers');
 
   driversRoom.on('orderAdded', function(data) {
     console.log('driversRoom orderAdded', data);
