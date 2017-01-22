@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var orderNotifier = require('../helpers/notifications/orders');
+var respond = require('../helpers/response-promisify');
+
 const logger = require('../helpers/logger');
 
 /* GET home page. */
@@ -40,19 +42,21 @@ router.get('/events', (req, res) => {
   });
 });
 
-router.get('/driver-test/:id', (req, res) => {
+router.get('/admin/orders', (req, res) => {
+  res.render('orders');
+})
+
+router.get('/driver-test/:id', respond(req => {
   const orderId = req.params.id;
   logger.log('driver-test', orderId);
 
-  orderNotifier.pingDriverChannel(orderId, { ggg: 1 })
+  return orderNotifier.pingDriverChannel(orderId, { ggg: 1 })
     .then(r => {
       logger.log('pingDriverChannel', r);
-      res.render('orders');
-    })
-    .catch(err => {
-      res.json({ err });
+
+      return r;
     });
-});
+}));
 
 // setInterval(() => { orderNotifier.addOrder('aosjdaoisdj'); }, 3000);
 

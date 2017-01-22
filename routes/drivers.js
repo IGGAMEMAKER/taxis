@@ -7,7 +7,6 @@ var authentication = require('../middlewares/authentication');
 var api = require('../helpers/api');
 var respond = require('../helpers/response-promisify');
 
-
 router.get('/', authentication.isAuthenticated, respond(req => {
   return api.drivers.all();
 }));
