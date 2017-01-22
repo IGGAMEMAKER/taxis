@@ -102,6 +102,7 @@ app.post('/orders/event', respond(req => {
   if (event === 'drivers') {
     driverRoom.emit('orderAdded', data);
   }
+
   emit(channel, event, data);
   logger2.log('emited');
   return mockerPromise({ msg: req.body });

@@ -24,7 +24,7 @@ script.
     console.log('driversRoom orderAdded', data);
 
     var orderId = data.orderId;
-    $("#drivers").append($("<p>").text(order + " : " + orderId));
+    $("#drivers").append($("<p>").text('order' + " : " + orderId));
 
     initializeOrderRoom(orderId);
   });
