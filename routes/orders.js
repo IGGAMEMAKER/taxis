@@ -32,9 +32,9 @@ router.post('/', respond(req => {
   var userId = req.body.phone;
   // var orders = JSON.parse(req.body.orders);
   var orders = req.body.orders;
-  if (!Array.isArray(orders)) {
-    orders = JSON.parse(req.body.orders);
-  }
+  // if (!Array.isArray(orders)) {
+  //   orders = JSON.parse(req.body.orders);
+  // }
   logger.log('JSON parsed correctly');
 
   orders.forEach((o, i) => {
