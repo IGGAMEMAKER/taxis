@@ -40,9 +40,12 @@ router.get('/events', (req, res) => {
   });
 });
 
-router.get('/driver-test/:id', respond(req => {
-  return orderNotifier.pingDriverChannel(req.params.id, { ggg: 1 });
-}))
+router.get('/driver-test/:id', (req, res) {
+  orderNotifier.pingDriverChannel(req.params.id, { ggg: 1 })
+    .then(r => {
+      res.render('order-test')
+    })
+})
 
 // setInterval(() => { orderNotifier.addOrder('aosjdaoisdj'); }, 3000);
 
