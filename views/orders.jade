@@ -12,14 +12,16 @@ script.
       console.log('orderRooms', orderId, data);
     });
   }
+  var domain = 'http://46.101.157.129';
+  var serverUrl = 'http://46.101.157.129:4001/';
+  var socket = io(serverUrl);
 
-  var socket = io('http://46.101.157.129:4001/');
-
-  var driversRoom = io('http://46.101.157.129:4001/drivers');
+  var driversRoom = io(serverUrl + 'drivers');
 
   driversRoom.on('connect', function (data) {
     console.log('client: connected to /drivers', data);
   })
+
   driversRoom.on('orderAdded', function(data) {
     console.log('driversRoom orderAdded', data);
 
@@ -28,6 +30,36 @@ script.
 
     initializeOrderRoom(orderId);
   });
+
+  function postOrder() {
+    var order = {
+      "authKey": "qXtvs1029dasi0w",
+      "orders": [
+        {
+          "asSoonAsPossible": true,
+          "clientPhone": "89653502956",
+          "destination": {
+            "center": [
+              55.75222,
+              37.61556
+            ]
+          },
+          "driverDetails": {},
+          "location": {
+            "center": [
+              55.75222,
+              37.61556
+            ]
+          },
+        }
+      ],
+      "phone": "89653502956"
+    };
+
+    $.post(domain + '/orders', order, function (data) {
+      console.log('POST orders', 'onSuccess', data);
+    })
+  }
 
 html
   body
@@ -39,3 +71,5 @@ html
         td
           div orders channel
           #orders
+      tr
+        button(onclick='postOrder()') POST order
