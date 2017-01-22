@@ -41,9 +41,15 @@ router.get('/events', (req, res) => {
 });
 
 router.get('/driver-test/:id', (req, res) => {
-  orderNotifier.pingDriverChannel(req.params.id, { ggg: 1 })
+  const orderId = req.params.id;
+  logger.log('driver-test', orderId);
+
+  orderNotifier.pingDriverChannel(orderId, { ggg: 1 })
     .then(r => {
-      res.render('order-test')
+      res.render('order-test');
+    })
+    .catch(err => {
+      res.json({ err });
     })
 })
 
