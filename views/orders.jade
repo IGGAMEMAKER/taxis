@@ -56,8 +56,13 @@ script.
       "phone": "89653502956"
     };
 
-    $.post(domain + '/orders', order, function (data) {
-      console.log('POST orders', 'onSuccess', data);
+    $.ajax({
+      type: "POST",
+      url: domain + '/orders',
+      data: order,
+      success: function (data) {
+        console.log('POST orders', 'onSuccess', data);
+      }
     })
   }
 
