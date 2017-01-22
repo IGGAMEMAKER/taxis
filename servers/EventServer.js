@@ -27,24 +27,26 @@ var eventFirer = firer.listen(4001, function () {
 });
 
 var io = require('socket.io')(eventFirer);
-// var fs = require('fs');
 
 io.on('connection', function (socket) {
-  console.log('hoorray. Someone Connected!', new Date());
-  console.log(socket.id);
   // console.log(socket.rooms);
   // console.log(socket.client.request);
+  console.log('hoorray. Someone Connected!', new Date(), socket.id);
 
   socket.emit('news', { hello: 'world' });
 
   socket.on('my other event', function (data) {
     console.log(data);
   });
+
+  socket.on('joinOrderRoom', function (orderId) {
+    socket.join(`/orders/${orderId}`);
+  });
 });
 
-var emit = (channel, event, data, push) => {
-  logger2.log('EMIT WS: ', channel, event);
-  io.of(channel).emit(event, data);
+var emit = (room, event, data, push) => {
+  logger2.log('EMIT WS: ', room, event);
+  io.of(room).emit(event, data);
 };
 
 // view engine setup
@@ -66,30 +68,34 @@ var devErrorHandler = require('../middlewares/error-handler');
 // app.use('/', require('./routes/index'));
 
 var orders = {};
-
-// app.post('/rooms', )
+const driverRoom = io.of('/drivers');
 
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
-  var { channel, event, data, push } = req.body;
+  const { channel, event, data, push } = req.body;
 
   if (event === 'orderAdded') {
-    var orderId = data.orderId;
-    orders[orderId] = io.of('/orders/' + data.orderId);
+    const orderId = data.orderId;
 
-    orders[orderId].on('connection', function(socket) {
+    driverRoom.emit('orderAdded', data);
+
+    orders[orderId] = io.of(`/orders/${orderId}`);
+
+    orders[orderId].on('connection', function (socket) {
       console.log('someone connected to order', orderId);
       socket.emit(event, data);
-      setTimeout(() => {
-        emit(channel, event, data);
-      }, 1000);
+
+      setTimeout(() => { emit(channel, event, data); }, 1000);
     });
 
-    orders[orderId].on('disconnect', function(socket) {
+    orders[orderId].on('disconnect', function (socket) {
       console.log('someone disconnected from order', orderId);
     });
   }
 
+  if (event === 'drivers') {
+    driverRoom.emit('orderAdded', data);
+  }
   emit(channel, event, data);
   logger2.log('emited');
   return mockerPromise({ msg: req.body });

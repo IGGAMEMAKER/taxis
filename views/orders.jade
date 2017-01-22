@@ -1,0 +1,38 @@
+script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js").
+script(src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js").
+script.
+  var orderRooms = {};
+
+  function initializeOrderRoom(orderId) {
+    orderRooms[orderId] = io.of('/orders/' + orderId);
+
+    var room = orderRooms[orderId];
+
+    room.on('orderAdded', function (data) {
+      console.log('orderRooms', orderId, data);
+    });
+  }
+
+  var socket = io('http://46.101.157.129:4001/');
+
+  var driversRoom = io.of('/drivers');
+
+  driversRoom.on('orderAdded', function(data) {
+    console.log('driversRoom orderAdded', data);
+
+    var orderId = data.orderId;
+    $("#drivers").append($("<p>").text(order + " : " + orderId));
+
+    initializeOrderRoom(orderId);
+  });
+
+html
+  body
+    table
+      tr
+        td
+          div driver channel
+          #drivers
+        td
+          div orders channel
+          #orders

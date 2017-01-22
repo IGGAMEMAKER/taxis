@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var orderNotifier = require('../helpers/notifications/orders');
+var respond = require('../helpers/response-promisify');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -32,6 +33,16 @@ router.get('/order-test/:id', function (req, res) {
   setTimeout(() => { orderNotifier.clientPicked(orderId); }, 9000);
   setTimeout(() => { orderNotifier.orderFinished(orderId); }, 11000);
 });
+
+router.get('/events', (req, res) => {
+  res.render('events', {
+    room: req.query.room
+  });
+});
+
+router.get('/driver-test/:id', respond(req => {
+  return orderNotifier.pingDriverChannel(req.params.id, { ggg: 1 });
+}))
 
 // setInterval(() => { orderNotifier.addOrder('aosjdaoisdj'); }, 3000);
 

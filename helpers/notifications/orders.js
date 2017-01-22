@@ -1,5 +1,19 @@
 var notifier = require('../notify');
 
+// var eventServerAddress = 'http://localhost:4000/orders/event/';
+
+// const createOrderRoom = return new Promise((resolve, reject) => {
+//   request
+//     .post(eventServerAddress, { channel, event, data, push })
+//     .end((err, res) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(1);
+//       }
+//     });
+// });
+
 var notify = (id, event, object) => {
   return notifier.notify('/orders/' + id, event, Object.assign(object, { orderId: id }));
 };
@@ -9,6 +23,9 @@ module.exports = {
     return notify(id, 'orderAdded', {});
   },
 
+  pingDriverChannel: (id, msg) => {
+    return notify(id, 'drivers', { msg });
+  },
 
   pickOrder: (id, driverId) => {
     // can be fired more than once per order

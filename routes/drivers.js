@@ -73,13 +73,13 @@ router.post('/', respond(req => {
 }));
 
 router.patch('/sessions/open', authentication.isDriver, respond(req => {
-  var phone = req.driverId;
+  const phone = req.driverId;
 
   return api.drivers.openSession(phone);
 }));
 
 router.patch('/sessions/close', authentication.isDriver, respond(req => {
-  var phone = req.driverId;
+  const phone = req.driverId;
 
   return api.drivers.closeSession(phone);
 }));

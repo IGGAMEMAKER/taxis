@@ -141,8 +141,8 @@ const calculateRoutePrice = (destinationLatitude, departureLatitude, destination
   });
 };
 
-calculateRoutePrice(55.854330, 55.749972, 37.265097, 37.602590)
-  .then(logger.log);
+// calculateRoutePrice(55.854330, 55.749972, 37.265097, 37.602590)
+//   .then(logger.log);
 
 router.get('/route/price', respond(req => {
   // test url:

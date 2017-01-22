@@ -1,0 +1,22 @@
+script(src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.2/socket.io.min.js").
+script.
+  var room = "#{room}";
+  var socket = io('http://46.101.157.129:4001/');
+
+  socket.on('news', function (data) {
+    console.log(data);
+    socket.emit('my other event', { my: 'data' });
+  });
+
+  socket.on('orderAdded', function (data) {
+    console.log('HOHO! orderAdded!', data);
+    socket.emit('got orderAdded event', { my: 'orderAdded' });
+  });
+
+  function listenRoom(r) {
+    socket.emit('joinRoom', { room: r });
+  }
+
+html
+  body
+    button
