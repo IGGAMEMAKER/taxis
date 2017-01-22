@@ -33,6 +33,8 @@ io.on('connection', function (socket) {
   // console.log(socket.client.request);
   console.log('hoorray. Someone Connected!', new Date(), socket.id);
 
+  socket.join('/drivers');
+
   socket.emit('news', { hello: 'world' });
 
   socket.on('my other event', function (data) {
