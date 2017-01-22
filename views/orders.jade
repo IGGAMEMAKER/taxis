@@ -17,6 +17,9 @@ script.
 
   var driversRoom = io('http://46.101.157.129:4001/drivers');
 
+  driversRoom.on('connect', function (data) {
+    console.log('client: connected to /drivers', data);
+  })
   driversRoom.on('orderAdded', function(data) {
     console.log('driversRoom orderAdded', data);
 
