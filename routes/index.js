@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 var orderNotifier = require('../helpers/notifications/orders');
-var respond = require('../helpers/response-promisify');
+const logger = require('../helpers/logger');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -46,7 +46,8 @@ router.get('/driver-test/:id', (req, res) => {
 
   orderNotifier.pingDriverChannel(orderId, { ggg: 1 })
     .then(r => {
-      res.render('order-test');
+      logger.log('pingDriverChannel', r);
+      res.render('orders');
     })
     .catch(err => {
       res.json({ err });
