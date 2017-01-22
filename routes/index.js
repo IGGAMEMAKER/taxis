@@ -40,7 +40,7 @@ router.get('/events', (req, res) => {
   });
 });
 
-router.get('/driver-test/:id', (req, res) {
+router.get('/driver-test/:id', (req, res) => {
   orderNotifier.pingDriverChannel(req.params.id, { ggg: 1 })
     .then(r => {
       res.render('order-test')
