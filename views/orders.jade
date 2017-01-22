@@ -32,37 +32,44 @@ script.
   });
 
   function postOrder() {
+    var orders = [
+      {
+        "asSoonAsPossible": true,
+        "clientPhone": "89653502956",
+        "destination": {
+          "center": [
+            55.75222,
+            37.61556
+          ]
+        },
+        "driverDetails": {},
+        "location": {
+          "center": [
+            55.75222,
+            37.61556
+          ]
+        }
+      }
+    ];
+
     var order = {
       "authKey": "qXtvs1029dasi0w",
-      "orders": [
-        {
-          "asSoonAsPossible": true,
-          "clientPhone": "89653502956",
-          "destination": {
-            "center": [
-              55.75222,
-              37.61556
-            ]
-          },
-          "driverDetails": {},
-          "location": {
-            "center": [
-              55.75222,
-              37.61556
-            ]
-          },
-        }
-      ],
+      "orders": orders,
       "phone": "89653502956"
     };
 
     $.ajax({
       type: "POST",
       url: domain + '/orders',
-      data: order,
+      data: {
+        authKey: 'qXtvs1029dasi0w',
+        phone: '89653502956',
+        orders: orders,
+      },
       success: function (data) {
         console.log('POST orders', 'onSuccess', data);
-      }
+      },
+      dataType: "json"
     })
   }
 
