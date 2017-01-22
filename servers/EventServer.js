@@ -72,6 +72,10 @@ var devErrorHandler = require('../middlewares/error-handler');
 var orders = {};
 const driverRoom = io.of('/drivers');
 
+driverRoom.on('connect', function (socket) {
+  logger2.log('connection to driverRoom in EventServer');
+})
+
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
   const { channel, event, data, push } = req.body;
