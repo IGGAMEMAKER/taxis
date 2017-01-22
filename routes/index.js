@@ -44,7 +44,7 @@ router.get('/events', (req, res) => {
 
 router.get('/admin/orders', (req, res) => {
   res.render('orders');
-})
+});
 
 router.get('/driver-test/:id', respond(req => {
   const orderId = req.params.id;
