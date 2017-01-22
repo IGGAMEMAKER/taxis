@@ -4,7 +4,7 @@ script.
   var orderRooms = {};
 
   function initializeOrderRoom(orderId) {
-    orderRooms[orderId] = io.of('/orders/' + orderId);
+    orderRooms[orderId] = io('/orders/' + orderId);
 
     var room = orderRooms[orderId];
 
@@ -15,7 +15,7 @@ script.
 
   var socket = io('http://46.101.157.129:4001/');
 
-  var driversRoom = io.of('/drivers');
+  var driversRoom = io('/drivers');
 
   driversRoom.on('orderAdded', function(data) {
     console.log('driversRoom orderAdded', data);

@@ -51,8 +51,8 @@ router.get('/driver-test/:id', (req, res) => {
     })
     .catch(err => {
       res.json({ err });
-    })
-})
+    });
+});
 
 // setInterval(() => { orderNotifier.addOrder('aosjdaoisdj'); }, 3000);
 
