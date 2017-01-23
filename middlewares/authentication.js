@@ -3,8 +3,10 @@ var header = (req, key) => {
 };
 
 var mockKey = 'qXtvs1029dasi0w';
+var mockDriverKey = '10da09s8dh0a9sdj0a';
 
 var logger = require('../helpers/logger');
+
 
 module.exports = {
   isAuthenticated: (req, res, next) => {
@@ -12,14 +14,12 @@ module.exports = {
     var phone = header(req, 'phone');
 
     logger.log('REWRITE AUTHENTICATION! /middlewares/authentication/isAuthenticated');
+
     if (authKey === mockKey) { // check authentication
       req.userId = phone;
       next();
     } else {
-      // logger.log('authentication failed');
-      // res.status(501).json({ ololo: 1}).end();
       res.sendStatus(401);
-      // next(501);
     }
   },
 
@@ -34,11 +34,14 @@ module.exports = {
   },
 
   isDriver: (req, res, next) => {
+    var authKey = header(req, 'authKey');
+    var phone = header(req, 'phone');
+
     // go to DB and find it out
-    if (true) { // check authentication
+    if (authKey === mockDriverKey) { // check authentication
       req.isDriver = true;
-      req.userId = header(req, 'phone');
-      req.driverId = header(req, 'phone');
+      req.userId = phone;
+      req.driverId = phone;
       next();
     } else {
       res.sendStatus(403);
@@ -46,11 +49,15 @@ module.exports = {
   },
 
   check: (req, res, next) => {
-    // checks credentials and sets variables: if user is driver, or user is a client, or user is Admin
+    // checks credentials and sets variables:
+    // if user is driver, or user is a client, or user is Admin
+
     var phone = header(req, 'phone');
+
     req.userId = phone;
     req.isUser = true;
     req.authenticated = true;
+
     next();
   }
 };
