@@ -44,7 +44,49 @@ paths:
               authKey:
                 type: string
                 description: it is saved both on clientside and serverside and is sended in all authenticated requests
+  /authentication/authenticateDriver:
+    post:
+      summary: mOcK
+      description: Gets pincode, checks if it is correct (and user exists) then sends authKey. Responds by sending authKey
+      parameters:
+      - name: phone
+        in: formData
+        description: 89888888888
+        type: string
+        required: true
+      - name: pincode
+        in: formData
+        type: number
+        required: true
+        description: six digit number
+      responses:
+        200:
+          description: OK. here must be auth key too
+          schema:
+            type: object
+            properties:
+              authKey:
+                type: string
+                description: it is saved both on clientside and serverside and is sended in all authenticated requests
   /authentication/requestCode/{phone}:
+    get:
+      summary: OK
+      description: Sends pincode to a phone and generates new authKey in DB. User needs to write pincode manually to receive this authKey.
+      parameters:
+        - name: phone
+          in: path
+          description: SMS code will be sent on this phone, if the user with such phone number xists
+          required: true
+          type: string
+      responses:
+        200:
+          description: Do not need to check parameters
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+  /authentication/requestCodeForDriver/{phone}:
     get:
       summary: OK
       description: Sends pincode to a phone and generates new authKey in DB. User needs to write pincode manually to receive this authKey.
@@ -331,6 +373,7 @@ paths:
                   $ref: '#/definitions/Order'
   /orders/route/price:
     get:
+      summary: mOcK
       description: Calculate estimated `Order` price.
       parameters:
         - name: destinationLatitude
