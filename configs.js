@@ -5,5 +5,7 @@ var configs = JSON.parse(file);
 module.exports = {
   db: configs.db || 'localhost:27017',
   domain: configs.domain || 'localhost',
+  smsApiKey: configs.smsApiKey || '',
+  smsApiSecret: configs.smsApiSecret || ''
   // db: '146.185.171.204:27017'
 };

@@ -5,6 +5,7 @@ var logger = console;
 var api = require('../helpers/api');
 
 var response = require('../helpers/response');
+var smsSender = require('../helpers/sms-sender');
 
 router.get('/requestCode/:phone', (req, res) => {
   var phone = req.params.phone;
@@ -22,7 +23,6 @@ router.get('/requestCode/:phone', (req, res) => {
     })
     .catch(response.error('', res));
 });
-
 
 router.get('/requestCodeForDriver/:phone', (req, res) => {
   var phone = req.params.phone;
