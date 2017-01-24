@@ -1,10 +1,14 @@
 const configs = require('../configs');
 
+const request = require('superagent');
 
 const smsApiKey = configs.smsApiKey;
 const smsApiSecret = configs.smsApiSecret;
 // const smsApiKey = '5F5C418A0F914BBC8234A9BF5EDDAD97';
 // const smsApiSecret = 'JViE5vDor0Sw3WllZka15Q==';
+
+const smsApiId = configs.smsApiId;
+
 
 const sinchSms = require('sinch-sms')({
   key: smsApiKey,
@@ -57,11 +61,21 @@ const pend = (sender, recipient, message, options) => {
     });
 }
 
+const send2 = (sender, recipient, message, options) => {
+  return request
+    .get(`http://sms.ru/sms/send\?api_id=${smsApiId}&to=${recipient}&text=${message}`)
+    // .send({ from: sender || 'Трезвый водитель', message })
+    .then(r => r)
+    .catch(err => { throw err; });
+  // curl -d "text=hello world привет мир" http://sms.ru/sms/send\?api_id=028441D8-E861-5AD5-6295-8436EBC4CD9D\&to=+79648847260
+}
+
 module.exports = {
-  send,
+  send: send2,
   check,
   pend
 };
+
   // const body = message;
   // const ContentMD5 = crypto.createHash('md5').update(parseToUTF8(body)).digest('base64');
   // // const ContentMD5 = 'jANzQ+rgAHyf1MWQFSwvYw==';
