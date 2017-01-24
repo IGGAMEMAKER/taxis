@@ -15,10 +15,12 @@ const parseToUTF8 = (string) => string;
 module.exports = (sender, recipient, message, options) => {
   const body = message;
   const ContentMD5 = crypto.createHash('md5').update(parseToUTF8(body)).digest('base64');
+  logger.log('ContentMD5', ContentMD5);
 
   const xTimestamp = new Date();
-  const timeStampString = `x-timestamp:${xTimestamp}`;
-  const StringToSign = `POST\n${ContentMD5}\napplication/json\n${timeStampString}\n/v1/sms/${recipient}`;
+  const timestamp = `x-timestamp:${xTimestamp}`;
+  const contentType = 'application/json';
+  const StringToSign = `POST\n${ContentMD5}\n${contentType}\n${timestamp}\n/v1/sms/${recipient}`;
   logger.log('StringToSign', StringToSign);
 
   const secret = smsApiSecret;
@@ -32,6 +34,8 @@ module.exports = (sender, recipient, message, options) => {
     .post(`https://messagingapi.sinch.com/v1/Sms/${recipient}`)
     .send({ from: sender || 'Трезвый водитель', message })
     .set('Authorization', Authorization)
+    .set('X-Timestamp', xTimestamp)
+    .set('Content-Type', contentType)
     .then(r => r)
     .catch(err => { throw err; });
 };
