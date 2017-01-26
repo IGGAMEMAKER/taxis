@@ -10,10 +10,10 @@ const smsApiSecret = configs.smsApiSecret;
 const smsApiId = configs.smsApiId;
 
 
-const sinchSms = require('sinch-sms')({
-  key: smsApiKey,
-  secret: smsApiSecret
-});
+// const sinchSms = require('sinch-sms')({
+//   key: smsApiKey,
+//   secret: smsApiSecret
+// });
 
 const Promise = require('bluebird');
 
@@ -23,25 +23,25 @@ const logger = require('../helpers/logger');
 const parseToUTF8 = (myString) => JSON.stringify(myString);
 // 143460337
 const send = (sender, recipient, message, options) => {
-  return sinchSms.send(recipient, message)
-    .then(result => {
-      logger.log('SMS Response', result);
-      return result;
-    })
-    .catch(err => {
-      logger.log('SMS Error', err);
-    });
+  // return sinchSms.send(recipient, message)
+  //   .then(result => {
+  //     logger.log('SMS Response', result);
+  //     return result;
+  //   })
+  //   .catch(err => {
+  //     logger.log('SMS Error', err);
+  //   });
 };
 
 const check = (messageId) => {
-  return sinchSms.getStatus(messageId)
-    .then(result => {
-      logger.log('SMS GET STATUS RESPONSE', result);
-      return result;
-    })
-    .catch(err => {
-      logger.log('SMS GET STATUS Error', err);
-    });
+  // return sinchSms.getStatus(messageId)
+  //   .then(result => {
+  //     logger.log('SMS GET STATUS RESPONSE', result);
+  //     return result;
+  //   })
+  //   .catch(err => {
+  //     logger.log('SMS GET STATUS Error', err);
+  //   });
 };
 
 const cycleGettingStatus = (messageId, period) => {
