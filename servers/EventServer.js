@@ -74,7 +74,12 @@ const driverRoom = io.of('/drivers');
 
 driverRoom.on('connect', function (socket) {
   logger2.log('connection to driverRoom in EventServer');
-})
+
+  setInterval(() => {
+    socket.emit('news', { hello: 'world' });
+    driverRoom.emit('news', { hello: 'world', broadcast: true });
+  }, 2000);
+});
 
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
