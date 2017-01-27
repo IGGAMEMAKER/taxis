@@ -33,9 +33,7 @@ router.post('/', respond(req => {
   // var orders = JSON.parse(req.body.orders);
   var orders = req.body.orders;
 
-  // if (!Array.isArray(orders)) {
-  //   orders = JSON.parse(req.body.orders);
-  // }
+  if (!Array.isArray(orders)) throw new Error('parameter orders is not an array');
 
   logger.log('JSON parsed correctly', userId, orders);
 
@@ -70,6 +68,40 @@ router.post('/', respond(req => {
         });
     });
     // .then(sendOrdersToOrderServer(orders, userId))
+}));
+
+router.patch('/pick', authentication.isDriver, respond(req => {
+  const orderId = req.body.orderId;
+  const driverId = req.driverId;
+
+  return api.orders.pickOrder(orderId, driverId)
+  .then(result => {
+    return orderNotifier.pickOrder(orderId, driverId)
+    .then(r => {
+      return result;
+    });
+  })
+  .catch(err => {
+    logger.error(err);
+    throw err;
+  });
+}));
+
+router.patch('/pick-client', authentication.isDriver, respond(req => {
+  const orderId = req.body.orderId;
+  // const driverId = req.driverId;
+
+  return api.orders.pickClient(orderId)
+    .then(result => {
+      return orderNotifier.clientPicked(orderId)
+        .then(r => {
+          return result;
+        });
+    })
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
 }));
 
 router.get('/test-event/:id', respond(req => {

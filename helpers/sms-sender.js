@@ -59,7 +59,7 @@ const pend = (sender, recipient, message, options) => {
 
       cycleGettingStatus(messageId, 1000);
     });
-}
+};
 
 const send2 = (sender, recipient, message, options) => {
   return request
@@ -68,7 +68,7 @@ const send2 = (sender, recipient, message, options) => {
     .then(r => r)
     .catch(err => { throw err; });
   // curl -d "text=hello world привет мир" http://sms.ru/sms/send\?api_id=028441D8-E861-5AD5-6295-8436EBC4CD9D\&to=+79648847260
-}
+};
 
 module.exports = {
   send: send2,

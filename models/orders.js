@@ -7,6 +7,8 @@ var add = (object) => {
   return Orders.save(object);
 };
 
+const ORDER_STATUSES = require('../constants/order-statuses');
+
 var saveRecursively = (list, index, responses) => {
   if (index < list.length) {
     return Orders.save(list[index])
@@ -33,9 +35,32 @@ var setStatus = (orderId, status) => {
   return Orders.update({ _id: orderId }, { status });
 };
 
+const edit = (orderId, object) => {
+  return Orders.update({ _id: orderId }, object);
+};
+
+const pickOrder = (orderId, driverId) => {
+  return Orders.find({ _id: orderId })
+    .then(order => {
+      const { drivers } = order;
+
+      if (drivers.findIndex(driverId) < -1) {
+        drivers.push(driverId);
+      }
+
+      return edit(orderId, { drivers });
+    });
+};
+
+const pickClient = orderId => {
+  return setStatus(orderId, ORDER_STATUSES.ORDER_STATUS_PASSENGER_MET_DRIVER);
+};
+
 var exportObject = {
   add,
   all,
+  pickOrder,
+  pickClient,
 
   clear,
   addList: saveRecursively,

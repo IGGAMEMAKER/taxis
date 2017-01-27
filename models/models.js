@@ -20,7 +20,12 @@ module.exports = function(dbAddress) {
     Orders: db.model('Orders', {
       userId: String,
       driverId: String,
+
+      // those, who are attached to order (chosen by client)
       drivers: Array,
+      // // those, who wanted to pick this order(including those, who were actually chosen by client)
+      // possibleDrivers: Array,
+
       status: Number,
       added: Date, // when we received this order
 
