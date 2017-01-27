@@ -15,7 +15,7 @@ var Promise = require('bluebird');
 
 var orderNotifier = require('../helpers/notifications/orders');
 
-var request = require('superagent');
+const calculateRoutePrice = require('../helpers/calculate-route-price');
 
 
 var sendOrdersToOrderServer = (orders, userId) => result => {
@@ -57,6 +57,7 @@ router.post('/', respond(req => {
 
             logger.debug(`create room in order ${orderId}`);
 
+            // return () => { orderNotifier.addOrder(orderId) };
             return orderNotifier.addOrder(orderId);
           });
 
@@ -68,6 +69,21 @@ router.post('/', respond(req => {
         });
     });
     // .then(sendOrdersToOrderServer(orders, userId))
+}));
+
+router.patch('/drivers', authentication.isAuthenticated, respond(req => {
+  // attaches driver to order
+  const { drivers, orderId } = req.body;
+
+  return api.orders.chooseDrivers(orderId, drivers)
+    .then(result => {
+      return orderNotifier.driverChosen(orderId, drivers)
+        .then(r => result);
+    })
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
 }));
 
 router.patch('/pick', authentication.isDriver, respond(req => {
@@ -104,81 +120,28 @@ router.patch('/pick-client', authentication.isDriver, respond(req => {
     });
 }));
 
+router.patch('/driver-arrived', authentication.isDriver, respond(req => {
+  const orderId = req.body.orderId;
+  const driverId = req.driverId;
+
+  return api.orders.driverArrived(orderId)
+    .then(result => {
+      return orderNotifier.driverArrived(orderId, driverId)
+        .then(r => {
+          return result;
+        });
+    })
+    .catch(err => {
+      logger.error(err);
+      throw err;
+    });
+}));
+
 router.get('/test-event/:id', respond(req => {
   var orderId = req.params.id;
 
   return orderNotifier.addOrder(orderId);
 }));
-
-const map = require('../helpers/maps/moscow');
-
-const dotInMapPolygon = require('../helpers/dot-in-map-polygon');
-
-const computeRoutePathPrice = (start, end, duration) => {
-  // start and end are objects with structure
-  // { lat: value, lng: value }
-
-  // nonMKAD is 5 times more expensive than MKAD
-  // 55.854330, 37.265097
-  const isInPolygon = dotInMapPolygon(map, start.lat, start.lng);
-  if (isInPolygon) {
-    logger.log('isMKAD', start);
-    return duration;
-  }
-
-  logger.log('NO MKAD', start);
-  return duration * 5;
-};
-
-const calculateRoutePrice = (destinationLatitude, departureLatitude, destinationLongitude, departureLongitude) => {
-  let totalDuration;
-
-  logger.debug(`/route/price ${destinationLatitude}, ${destinationLongitude}`);
-  logger.debug(`${departureLatitude}, ${departureLongitude}`);
-
-  const key = 'AIzaSyCL921mwdCIwz4uKJOjBfRAFDmRmZLgjPY';
-
-  const origin = `${departureLatitude},${departureLongitude}`;
-  const destination = `${destinationLatitude},${destinationLongitude}`;
-
-  const url = 'https://maps.googleapis.com/maps/api/directions';
-
-  return new Promise((resolve, reject) => {
-    request
-      .get(`${url}/json?mode=driving&origin=${origin}&destination=${destination}&key=${key}`)
-      .end((err, data) => {
-        if (err) return reject(err);
-
-        const route = data.body.routes[0].legs[0];
-        const { steps } = route;
-        totalDuration = route.duration.value;
-
-        logger.debug(`duration in seconds: ${totalDuration}`);
-        totalDuration = Math.ceil(totalDuration / 60);
-
-        const result = steps.map(step => {
-          const duration = step.duration.value;
-          const start = step.start_location;
-          const end = step.end_location;
-
-          const price = computeRoutePathPrice(start, end, duration);
-
-          return { duration, start, end, price };
-        });
-
-        // logger.log(result);
-
-        const price = result.map(r => r.price).reduce((p, c) => p + c);
-
-        logger.log(`summary price is: ${price},  duration: ${totalDuration}`);
-        // resolve({ price: 1600, duration: 20 });
-        resolve({ price, duration: totalDuration });
-      });
-  });
-};
-
-// calculateRoutePrice(55.854330, 55.749972, 37.265097, 37.602590)
-//   .then(logger.log);
 
 router.get('/route/price', respond(req => {
   // test url:

@@ -44,7 +44,7 @@ const pickOrder = (orderId, driverId) => {
     .then(order => {
       const { drivers } = order;
 
-      if (drivers.findIndex(driverId) < -1) {
+      if (drivers.findIndex(driverId) < 0) {
         drivers.push(driverId);
       }
 
@@ -56,11 +56,26 @@ const pickClient = orderId => {
   return setStatus(orderId, ORDER_STATUSES.ORDER_STATUS_PASSENGER_MET_DRIVER);
 };
 
+const driverArrived = orderId => {
+  return setStatus(orderId, ORDER_STATUSES.ORDER_STATUS_DRIVER_ARRIVED);
+};
+
+const chooseDriver = (orderId, driverId) => {
+  return edit(orderId, { driverId });
+};
+
+const chooseDrivers = (orderId, drivers) => {
+  return edit(orderId, { drivers });
+};
+
 var exportObject = {
   add,
   all,
   pickOrder,
   pickClient,
+  driverArrived,
+  chooseDriver,
+  chooseDrivers,
 
   clear,
   addList: saveRecursively,
