@@ -23,6 +23,10 @@ module.exports = {
     return notify(id, 'orderAdded', {});
   },
 
+  cancelOrder: (id, status) => {
+    return notify(id, 'order-cancelled', { status });
+  },
+
   pingDriverChannel: (id, msg) => {
     return notify(id, 'drivers', { msg });
   },

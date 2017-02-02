@@ -114,7 +114,7 @@ app.post('/orders/event', respond(req => {
     notifyDrivers(event, data);
   }
 
-  if (event === 'pick-order' || event === 'driver-chosen') {
+  if (event === 'pick-order' || event === 'driver-chosen' || event === 'order-cancelled') {
     notifyDrivers(event, data);
   }
 

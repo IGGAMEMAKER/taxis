@@ -200,7 +200,11 @@ router.patch('/cancel/:orderId', authentication.check, respond(req => {
     status = STATUSES.ORDER_STATUS_CANCELED_BY_ADMIN;
   }
 
-  return api.orders.setStatus(orderId, status);
+  return api.orders.setStatus(orderId, status)
+    .then(r => {
+      return orderNotifier.cancelOrder(orderId, status)
+        .then(x => r);
+    });
 }));
 
 module.exports = router;
