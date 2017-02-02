@@ -19,6 +19,13 @@ router.get('/clearAll', authentication.isAdmin, respond(req => {
   return api.drivers.clear();
 }));
 
+router.patch('/', authentication.isDriver, respond(req => {
+  const driverId = req.driverId;
+  const changes = req.body.changes;
+
+  return api.drivers.edit(driverId, changes);
+}));
+
 router.get('/:driverId', authentication.check, respond(req => {
   var phone = req.params.driverId;
   var object;

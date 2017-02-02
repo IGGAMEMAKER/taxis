@@ -25,9 +25,15 @@ var clear = () => {
   return Drivers.remove({});
 };
 
+// driverId
+const edit = (phone, changes) => {
+  return Drivers.update({ phone }, changes);
+};
+
 var exportObject = {
   add,
   all,
+  edit,
   clear,
   openSession,
   closeSession,

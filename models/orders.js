@@ -74,7 +74,7 @@ var exportObject = {
   pickOrder,
   pickClient,
   driverArrived,
-  chooseDriver,
+  chooseDriver, // TODO delete this method
   chooseDrivers,
 
   clear,

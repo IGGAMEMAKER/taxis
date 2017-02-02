@@ -72,47 +72,60 @@ var devErrorHandler = require('../middlewares/error-handler');
 var orders = {};
 const driverRoom = io.of('/drivers');
 
+const notifyDrivers = (tag, data) => {
+  driverRoom.emit(tag, data);
+};
+
 driverRoom.on('connect', function (socket) {
   logger2.log('connection to driverRoom in EventServer');
 
   setInterval(() => {
     socket.emit('news', { hello: 'world' });
-    driverRoom.emit('news', { hello: 'world', broadcast: true });
+
+    notifyDrivers('news', { hello: 'world', broadcast: true });
   }, 2000);
 });
+
+const createRoomForOrder = (channel, event, data) => {
+  const orderId = data.orderId;
+
+  notifyDrivers('orderAdded', data);
+
+  orders[orderId] = io.of(`/orders/${orderId}`);
+
+  orders[orderId].on('connection', function (socket) {
+    console.log('someone connected to order', orderId);
+    socket.emit(event, data);
+
+    setTimeout(() => { emit(channel, event, data); }, 1000);
+  });
+
+  orders[orderId].on('disconnect', function (socket) {
+    console.log('someone disconnected from order', orderId);
+  });
+};
 
 app.post('/orders/event', respond(req => {
   logger2.log('POST /orders/event', req.body);
   const { channel, event, data, push } = req.body;
 
   if (event === 'orderAdded') {
-    const orderId = data.orderId;
+    createRoomForOrder(channel, event, data);
+    notifyDrivers(event, data);
+  }
 
-    driverRoom.emit('orderAdded', data);
-
-    orders[orderId] = io.of(`/orders/${orderId}`);
-
-    orders[orderId].on('connection', function (socket) {
-      console.log('someone connected to order', orderId);
-      socket.emit(event, data);
-
-      setTimeout(() => { emit(channel, event, data); }, 1000);
-    });
-
-    orders[orderId].on('disconnect', function (socket) {
-      console.log('someone disconnected from order', orderId);
-    });
+  if (event === 'pick-order' || event === 'driver-chosen') {
+    notifyDrivers(event, data);
   }
 
   if (event === 'drivers') {
-    driverRoom.emit('orderAdded', data);
+    notifyDrivers('orderAdded', data);
   }
 
-  emit(channel, event, data);
-  logger2.log('emited');
+  // emit(channel, event, data);
+  // logger2.log('emited');
   return mockerPromise({ msg: req.body });
 }));
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
